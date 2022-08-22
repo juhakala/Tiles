@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="WpfTiles.Views.ViewPlayerController"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfTiles.Views"
+             xmlns:models="clr-namespace:WpfTiles.Model"
+             xmlns:converters="clr-namespace:WpfTiles.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:ConverterCoordinateToOffset x:Key="ConverterCoordinateToOffset" />
+        <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
+        <converters:ConverterStringToVisibility x:Key="ConverterStringToVisibility" />
+    </UserControl.Resources>
+    <ItemsControl ItemsSource="{Binding PlayerMovesCollection}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas
+                    Background="LightGray"
+                    />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerStyle>
+            <Style TargetType="ContentPresenter">
+                <Setter Property="Canvas.Left">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                            <Binding Path="X " />
+                            <Binding Path="DataContext.ControlHalfWay" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Canvas.Top" Value="10" />
+                <!--<Setter.Value>
+                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                            <Binding Path="Y" />
+                            <Binding Path="DataContext.CanvasAvailableControlOffsetY" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>-->
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+        <ItemsControl.Resources>
+            <DataTemplate DataType="{x:Type models:ControlTileItem}">
+                <Grid>
+                    <Grid.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
+                    </Grid.InputBindings>
+                    <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
+                        <Rectangle.Style>
+                            <Style TargetType="Rectangle">
+                                <Setter Property="Stroke" Value="Black" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Selected}" Value="True">
+                                        <Setter Property="Stroke" Value="Yellow" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Rectangle.Style>
+                    </Rectangle>
+                    <Rectangle Width="{Binding ImgWidth}" Height="{Binding ImgWidth}">
+                        <Rectangle.Style>
+                            <Style TargetType="Rectangle">
+                                <Setter Property="Fill">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource ConverterSignToImage}">
+                                            <Binding Path="Sign" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Rectangle.Style>
+                    </Rectangle>
+                    <TextBlock Text="{Binding Name}" Visibility="{Binding Name, Converter={StaticResource ConverterStringToVisibility}}" />
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.Resources>
+    </ItemsControl>
+</UserControl>

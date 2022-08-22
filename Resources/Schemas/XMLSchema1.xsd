@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XMLSchema1"
+    targetNamespace="http://tempuri.org/XMLSchema1.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema1.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema1.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+	
+	<xs:simpleType name="TileColorType" final="restriction" >
+		<xs:restriction base="xs:string">
+      <xs:enumeration value="gray" />
+      <xs:enumeration value="green" />
+      <xs:enumeration value="red" />
+      <xs:enumeration value="blue" />
+    </xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="TileType">
+		<xs:sequence>
+			<xs:element name="X" type="xs:unsignedInt" />
+			<xs:element name="Y" type="xs:unsignedInt" />
+			<xs:element name="Color" type="TileColorType" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PlayerTilesType">
+		<xs:sequence>
+			<xs:element name="PlayerTile" type="TileType" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:unsignedInt" />
+	</xs:complexType>
+	
+	<xs:complexType name="MapTilesType">
+		<xs:sequence>
+			<xs:element name="MapTile" type="TileType" minOccurs="2" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:unsignedInt" />
+	</xs:complexType>
+	
+	<xs:complexType name="ControlTileType">
+		<xs:sequence>
+			<xs:element name="Length" type="xs:unsignedInt" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ControlTilesType">
+		<xs:sequence>
+			<xs:element name="ControlTile" type="ControlTileType" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:unsignedInt" />
+	</xs:complexType>
+	
+	<xs:complexType name="MapType">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="Width" type="xs:unsignedInt" />
+			<xs:element name="Height" type="xs:unsignedInt" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AvailableTileType">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Sign" type="xs:unsignedInt" />
+				<xs:element name="Color" type="TileColorType" />
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AvailableControlTilesType">
+		<xs:sequence>
+			<xs:element name="AvailableControlTile" type="AvailableTileType" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:unsignedInt" />
+	</xs:complexType>
+	
+	<!-- ***** ROOT ELEMENT ***** -->
+	<xs:element name="Root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Map" type="MapType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="MapTiles" type="MapTilesType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="PlayerTiles" type="PlayerTilesType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="Control" type="MapType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="ControlTiles" type="ControlTilesType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="AvailableControlTiles" type="AvailableControlTilesType" minOccurs="1" maxOccurs="1" />
+				
+				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

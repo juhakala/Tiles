@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <PropertyGroup>
+    <XSDPath>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetPathToDotNetFrameworkSdkFile("xsd.exe", Microsoft.Build.Utilities.TargetDotNetFrameworkVersion.Latest))</XSDPath>
+  </PropertyGroup>
+  <Target Name="CreateTTPSchemaClasses" BeforeTargets="PreBuildEvent">
+    <Exec Command="&quot;$(XSDPath)&quot;   &quot;Resources\Schemas\XMLSchema1.xsd&quot; /classes /n:Resources.Schemas.XMLSchema1 &quot;/out:Resources\Schemas\\&quot;" ConsoleToMSBuild="true" />
+  </Target>
+  <ItemGroup>
+    <None Remove="Resources\Images\RightArrow.png" />
+    <None Remove="Resources\Images\RotateLeft.png" />
+    <None Remove="Resources\Images\RotateRight.png" />
+    <None Remove="Resources\Images\TransparentImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Schemas\XMLSchema1.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\Maps\Map1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\RightArrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\RotateLeft.png" />
+    <Resource Include="Resources\Images\RotateRight.png" />
+    <Resource Include="Resources\Images\TransparentImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
