@@ -63,6 +63,8 @@ namespace WpfTiles.Model
                 ParserMap.ParseOffsetXY(Control);
                 ParserTiles.ParseTilesNewXY(Control, ControlTiles, NameTiles);
 
+                PlayerTile.MapTiles = MapTiles;
+
                 AvailableControlTiles = ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 0);
                 AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 1));
                 AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));

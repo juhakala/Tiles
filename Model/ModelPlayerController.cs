@@ -92,25 +92,6 @@ namespace WpfTiles.Model
             }
         }
 
-        private void MakeSignMove(ControlTileItem item)
-        {
-            switch (item.Sign)
-            {
-                case (int)ENUM_SignTypes.Forward:
-                    Player.MoveForward();
-                    break;
-                case (int)ENUM_SignTypes.RotateRight:
-                    Player.RotateRight();
-                    break;
-                case (int)ENUM_SignTypes.RotateLeft:
-                    Player.RotateLeft();
-                    break;
-                default:
-                    throw new NotImplementedException($"ModelPlayerController.MakeSignMove sign: '{item.Sign}'");
-            }
-        }
-
-
         public void StartMoveSet()
         {
             var moveSetDict = InitMoveSetDict(); 
@@ -120,12 +101,13 @@ namespace WpfTiles.Model
             {
                 if (PlayerMoves[i].Sign != -1)
                 {
-                    MakeSignMove(PlayerMoves[i]);
+                    Player.MakeSignMove(PlayerMoves[i]);
                 }
                 else if (!string.IsNullOrEmpty(PlayerMoves[i].Name))
                 {
                     var tmp = UInt32.Parse(PlayerMoves[i].Name.Replace("f", ""));
-                    AddMoveSet(moveSetDict[tmp], i, i);
+                    if (Player.ValidateMoveSet(PlayerMoves[i]))
+                        AddMoveSet(moveSetDict[tmp], i, i);
                     i--;
                 }
             }

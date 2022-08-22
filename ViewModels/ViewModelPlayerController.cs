@@ -14,7 +14,7 @@ namespace WpfTiles.ViewModels
         public int ControlHalfWay { get; set; }
         public ViewModelPlayerController(ModelGameController cont)
         {
-            ControlHalfWay = 200;
+            ControlHalfWay = 200; //calculate player tile move colletion X offset and update so that current move is in middle 
             PlayerMovesCollection = new ObservableCollection<ControlTileItem>();
             cont.PlayerController.PlayerMovesCollectionChanged += UpdatePlayerMovesCollection;
         }

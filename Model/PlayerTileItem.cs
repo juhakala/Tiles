@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using WpfTiles.Model.Parser;
@@ -9,20 +10,12 @@ namespace WpfTiles.Model
 {
     public class PlayerTileItem : TileItem
     {
-        //private bool _MyPlayerNextMoveReady;
-        //public bool MyPlayerNextMoveReady
-        //{
-        //    get { return _MyPlayerNextMoveReady; }
-        //    set
-        //    {
-        //        if (_MyPlayerNextMoveReady != value)
-        //        {
-        //            _MyPlayerNextMoveReady = value;
-        //            NotifyPropertyChanged();
-        //            //_MyPlayerNextMoveReady = !value;
-        //        }
-        //    }
-        //}
+        private List<TileItem> _MapTiles = new List<TileItem>();
+        public List<TileItem> MapTiles
+        {
+            get { return _MapTiles; }
+            set { _MapTiles = value; }
+        }
 
         private int _Direction;
         public int Direction
@@ -35,7 +28,7 @@ namespace WpfTiles.Model
                     _Direction = value;
                     if (_Direction < 0)
                         _Direction = 3;
-                    else if (_Direction > 3)
+                    else if (_Direction > 3) 
                         _Direction = 0;
                     NotifyPropertyChanged();
                 }
@@ -62,6 +55,30 @@ namespace WpfTiles.Model
         public void RotateLeft()
         {
             Direction--;
+        }
+        public void MakeSignMove(ControlTileItem item)
+        {
+            switch (item.Sign)
+            {
+                case (int)ENUM_SignTypes.Forward:
+                    if (MoveValidator.ValidateForwardMove(this, item, MapTiles))
+                        MoveForward();
+                    break;
+                case (int)ENUM_SignTypes.RotateRight:
+                    if (MoveValidator.ValidateRotation(this, item, MapTiles))
+                        RotateRight();
+                    break;
+                case (int)ENUM_SignTypes.RotateLeft:
+                    if (MoveValidator.ValidateRotation(this, item, MapTiles))
+                        RotateLeft();
+                    break;
+                default:
+                    throw new NotImplementedException($"PlayerTileItem.MakeSignMove sign: '{item.Sign}'");
+            }
+        }
+        public bool ValidateMoveSet(TileItem item)
+        {
+            return MoveValidator.ValidateMoveSet(this, item, MapTiles);
         }
 
         public PlayerTileItem() { }
