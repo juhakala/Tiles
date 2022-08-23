@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using WpfTiles.Model.Parser;
 
 namespace WpfTiles.Model
@@ -36,25 +37,34 @@ namespace WpfTiles.Model
         }
         public void MoveForward()
         {
-            if (_Direction == 0)
-                X++;
-            else if (_Direction == 1)
-                Y++;
-            else if (_Direction == 2)
-                X--;
-            else if (_Direction == 3)
-                Y--;
-            else
-                throw new NotImplementedException($"MoveForward->_Direction:{_Direction}, invalid");
+            System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
+            {
+                if (_Direction == 0)
+                    X++;
+                else if (_Direction == 1)
+                    Y++;
+                else if (_Direction == 2)
+                    X--;
+                else if (_Direction == 3)
+                    Y--;
+                else
+                    throw new NotImplementedException($"MoveForward->_Direction:{_Direction}, invalid");
+            }));
         }
 
         public void RotateRight()
         {
-            Direction++;               
+            System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
+            {
+                Direction++;
+            }));
         }
         public void RotateLeft()
         {
-            Direction--;
+            System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
+            {
+                Direction--;
+            }));
         }
         public void MakeSignMove(ControlTileItem item)
         {

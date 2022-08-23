@@ -51,9 +51,18 @@
 		<xs:attribute name="Id" type="xs:unsignedInt" />
 	</xs:complexType>
 	
+	<xs:complexType name="LevelInformationType">
+		<xs:sequence>
+			<xs:element name="MajorLevel" type="xs:unsignedInt" />
+			<xs:element name="MinorLevel" type="xs:unsignedInt" />
+			<xs:element name="MicroLevel" type="xs:unsignedInt" />
+		</xs:sequence>
+	</xs:complexType>
+	
 	<xs:complexType name="MapType">
 		<xs:sequence>
 			<xs:element name="Name" type="xs:string" />
+			<xs:element name="LevelInformation" type="LevelInformationType" minOccurs="1" maxOccurs="1" />
 			<xs:element name="Width" type="xs:unsignedInt" />
 			<xs:element name="Height" type="xs:unsignedInt" />
 		</xs:sequence>
@@ -74,7 +83,7 @@
 		</xs:sequence>
 		<xs:attribute name="Id" type="xs:unsignedInt" />
 	</xs:complexType>
-	
+
 	<!-- ***** ROOT ELEMENT ***** -->
 	<xs:element name="Root">
 		<xs:complexType>
@@ -85,8 +94,6 @@
 				<xs:element name="Control" type="MapType" minOccurs="1" maxOccurs="1" />
 				<xs:element name="ControlTiles" type="ControlTilesType" minOccurs="1" maxOccurs="1" />
 				<xs:element name="AvailableControlTiles" type="AvailableControlTilesType" minOccurs="1" maxOccurs="1" />
-				
-				
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

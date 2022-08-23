@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WpfTiles.Model
@@ -92,25 +93,39 @@ namespace WpfTiles.Model
             }
         }
 
+        private async Task PlayerMoveSetTask(Dictionary<uint, List<ControlTileItem>> moveSetDict)
+        {
+            for (int i = 0; i < PlayerMoves.Count(); i++)
+            {
+                await Task.Run(() =>
+                {
+                    if (PlayerMoves[i].Sign != -1)
+                    {
+                        Player.MakeSignMove(PlayerMoves[i]);
+                    }
+                    else if (!string.IsNullOrEmpty(PlayerMoves[i].Name))
+                    {
+                        var tmp = UInt32.Parse(PlayerMoves[i].Name.Replace("f", ""));
+                        if (Player.ValidateMoveSet(PlayerMoves[i]))
+                            System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
+                            {
+                                AddMoveSet(moveSetDict[tmp], i, i);
+                            }));
+                        i--;
+                    }
+                });
+                await Task.Delay(2000);
+            }
+        }
+
         public void StartMoveSet()
         {
             var moveSetDict = InitMoveSetDict(); 
             PlayerMoves = new List<ControlTileItem>();
             AddMoveSet(moveSetDict.FirstOrDefault().Value);
-            for (int i = 0; i < PlayerMoves.Count(); i++)
-            {
-                if (PlayerMoves[i].Sign != -1)
-                {
-                    Player.MakeSignMove(PlayerMoves[i]);
-                }
-                else if (!string.IsNullOrEmpty(PlayerMoves[i].Name))
-                {
-                    var tmp = UInt32.Parse(PlayerMoves[i].Name.Replace("f", ""));
-                    if (Player.ValidateMoveSet(PlayerMoves[i]))
-                        AddMoveSet(moveSetDict[tmp], i, i);
-                    i--;
-                }
-            }
+            var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(moveSetDict));
+            //PlayerMovementTask.ContinueWith(); //check result
+            PlayerMovementTask.Start();
         }
 
         public ModelPlayerController(PlayerTileItem player, List<ControlTileItem> contItems)

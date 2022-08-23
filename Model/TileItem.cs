@@ -14,6 +14,9 @@ namespace WpfTiles.Model
         private double _Width;
         private double _Height;
         private SolidColorBrush _Color = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+        private int _ColorValue = 8421504;
+
+
         public uint X
         {
             get { return _X; }
@@ -74,7 +77,19 @@ namespace WpfTiles.Model
                 if (_Color != value)
                 {
                     _Color = value;
+                    ColorValue = int.Parse(value.Color.ToString().Substring(3), System.Globalization.NumberStyles.HexNumber);
                     NotifyPropertyChanged();
+                }
+            }
+        }
+        public int ColorValue
+        {
+            get { return _ColorValue; }
+            private set
+            {
+                if (_ColorValue != value)
+                {
+                    _ColorValue = value;
                 }
             }
         }
