@@ -15,7 +15,7 @@
          <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <WrapPanel
-                    VerticalAlignment="Center"
+                    
                     />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
