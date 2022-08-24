@@ -59,9 +59,6 @@
 			<Length>3</Length>
 		</ControlTile>
 		<ControlTile>
-			<Length>2</Length>
-		</ControlTile>
-		<ControlTile>
 			<Length>5</Length>
 		</ControlTile>
 	</ControlTiles>

@@ -12,6 +12,14 @@ using WpfTiles.Model.Parser;
 
 namespace WpfTiles.Model
 {
+    public class ChangeMapToEventArgs : EventArgs
+    {
+        public string FilePath { get; set; }
+        public ChangeMapToEventArgs(string path)
+        {
+            FilePath = path;
+        }
+    }
     class LevelInfo
     {
         public uint Major { get; set; }
@@ -20,6 +28,14 @@ namespace WpfTiles.Model
         public string FilePath { get; set; }
         public int Width { get { return (int)ENUM_TileSizes.MapBackground; } }
         public int Height { get { return (int)ENUM_TileSizes.MapBackground; } }
+        
+        public ICommand LevelInfoSelectedCommand => new RelayCommand(o => Selected());
+        public event EventHandler<ChangeMapToEventArgs> ChangeMapToEventHandler;
+        private void Selected()
+        {
+            EventHandler<ChangeMapToEventArgs> handler = ChangeMapToEventHandler;
+            handler?.Invoke(this, new ChangeMapToEventArgs(FilePath));
+        }
     }
     class LevelInfoes : NotifyPropertyChangedBase
     {

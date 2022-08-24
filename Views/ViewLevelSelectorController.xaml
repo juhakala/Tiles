@@ -27,9 +27,6 @@
         <ItemsControl.Resources>
             <DataTemplate DataType="{x:Type models:LevelInfoes}">
                 <Grid>
-                    <Grid.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding LevelInfoesExpandedCommand}" />
-                    </Grid.InputBindings>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
@@ -38,9 +35,13 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
-                    <Rectangle Width="{Binding Width}" Height="{Binding Height}" Stroke="Black" StrokeThickness="1" />
-                    <TextBlock Text="{Binding Major}"/>
-
+                    <Grid>
+                        <Grid.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding LevelInfoesExpandedCommand}" />
+                        </Grid.InputBindings>
+                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" Stroke="Black" StrokeThickness="1" />
+                        <TextBlock Text="{Binding Major}"/>
+                    </Grid>
                     <ItemsControl Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Levels}" Visibility="{Binding IsExpanded, Converter={StaticResource ConverterBoolToVisibility}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -57,6 +58,9 @@
                         <ItemsControl.Resources>
                             <DataTemplate DataType="{x:Type models:LevelInfo}">
                                 <Grid>
+                                    <Grid.InputBindings>
+                                        <MouseBinding Gesture="LeftClick" Command="{Binding LevelInfoSelectedCommand}" />
+                                    </Grid.InputBindings>
                                     <Rectangle Width="{Binding Width}" Height="{Binding Height}" Stroke="Black" StrokeThickness="1" />
                                     <TextBlock Text="{Binding Minor}"/>
                                 </Grid>

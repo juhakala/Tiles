@@ -58,16 +58,27 @@ namespace WpfTiles.ViewModels
             handler?.Invoke(this, new EventArgs());
         }
 
-        public ViewModelMainWindow(ModelGameController cont)
+        public void LoadMapFromContEvent(object sender, LevelLoaderEvent e)
         {
-            CanvasMapAreaWidth = cont.Map.MapAreaWidth;
-            CanvasMapAreaHeight = cont.Map.MapAreaHeight;
+            LoadMapFromCont(e.mCont);
+            NotifyPropertyChanged(nameof(CanvasMapOffsetX));
+            NotifyPropertyChanged(nameof(CanvasMapOffsetY));
+            NotifyPropertyChanged(nameof(CanvasMapItems));
+
+            NotifyPropertyChanged(nameof(CanvasControlOffsetX));
+            NotifyPropertyChanged(nameof(CanvasControlOffsetY));
+            NotifyPropertyChanged(nameof(CanvasControlItems));
+
+            NotifyPropertyChanged(nameof(AvailableControlsControlWM));
+            NotifyPropertyChanged(nameof(PlayerControllerWM));
+            NotifyPropertyChanged(nameof(LevelSelectorControllerWM));
+        }
+        private void LoadMapFromCont(ModelGameController cont)
+        {
             CanvasMapOffsetX = cont.Map.OffsetX;
             CanvasMapOffsetY = cont.Map.OffsetY;
             CanvasMapItems = PopulateCanvasMapItems(cont.MapTiles, cont.PlayerTile);
 
-            CanvasControlAreaWidth = cont.Control.MapAreaWidth;
-            CanvasControlAreaHeight = cont.Control.MapAreaHeight;
             CanvasControlOffsetX = cont.Control.OffsetX;
             CanvasControlOffsetY = cont.Control.OffsetY;
             CanvasControlItems = PopulateCanvasControlItems(cont.ControlTiles, cont.NameTiles);
@@ -75,6 +86,18 @@ namespace WpfTiles.ViewModels
             AvailableControlsControlWM = new ViewModelControlsItemControl(cont);
             PlayerControllerWM = new ViewModelPlayerController(cont);
             LevelSelectorControllerWM = new ViewModelLevelSelectorController(cont);
+        }
+
+        public ViewModelMainWindow(ModelGameController cont)
+        {
+            CanvasMapAreaWidth = cont.Map.MapAreaWidth;
+            CanvasMapAreaHeight = cont.Map.MapAreaHeight;
+
+            CanvasControlAreaWidth = cont.Control.MapAreaWidth;
+            CanvasControlAreaHeight = cont.Control.MapAreaHeight;
+
+            LoadMapFromCont(cont);
+
             StartPlayerAnimEvent += cont.HandleCustomEvent;
         }
         private ObservableCollection<TileItem> PopulateCanvasMapItems(List<TileItem> tiles, PlayerTileItem player)
