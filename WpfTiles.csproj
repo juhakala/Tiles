@@ -34,10 +34,13 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Update="Resources\Maps\Map1.xml">
+    <None Update="Resources\Maps\Major_0\Map1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Maps\Map2.xml">
+    <None Update="Resources\Maps\Major_0\Map2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Maps\Major_1\Map3.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

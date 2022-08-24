@@ -16,6 +16,7 @@ namespace WpfTiles.Model
         public ModelControl Control { get; set; }
         public ModelControl AvailableControlT { get; set; }
         public ModelPlayerController PlayerController { get; set; }
+        public ModelLevelSelectorController LevelSelectorController { get; set; }
 
         public List<TileItem> MapTiles { get; set; }
         public PlayerTileItem PlayerTile { get; set; }
@@ -30,52 +31,67 @@ namespace WpfTiles.Model
             PlayerController.StartMoveSet();
         }
 
+        public void InitEmptyMap()
+        {
+            //relevant error message and logging once implemented
+            Map = new ModelMap();
+            MapTiles = new List<TileItem>();
+            ControlTiles = new List<ControlTileItem>();
+            PlayerTile = new PlayerTileItem();
+            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles);
+        }
+
         public ModelGameController(string FilePath)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Root));
-            Root? root;
-            using (Stream reader = new FileStream(FilePath, FileMode.Open))
+            LevelSelectorController = new ModelLevelSelectorController();
+            var filepath = LevelSelectorController.Levels.FirstOrDefault()?.Levels.FirstOrDefault()?.FilePath;
+            if (string.IsNullOrEmpty(filepath))
             {
-                root = serializer.Deserialize(reader) as Root;
-            }
-            if (root == null)
-            {
-                //relevant error message and logging once implemented
-                Map = new ModelMap();
-                MapTiles = new List<TileItem>();
-                ControlTiles = new List<ControlTileItem>();
-                PlayerTile = new PlayerTileItem();
+                InitEmptyMap();
             }
             else
             {
-                Map = ParserMap.ParseMap(root.Map);
-                MapTiles = ParserTiles.Parse(root.MapTiles);
-                PlayerTile = ParserTiles.Parse(root.PlayerTiles);
-                ParserMap.ParseMapMaxMinXY(Map, MapTiles);
-                ParserMap.ParseOffsetXY(Map);
-                ParserTiles.ParseTilesNewXY(Map, MapTiles);
-                ParserTiles.ParseTilesNewXY(Map, PlayerTile);
+                XmlSerializer serializer = new XmlSerializer(typeof(Root));
+                Root? root;
+                using (Stream reader = new FileStream(filepath, FileMode.Open))
+                {
+                    root = serializer.Deserialize(reader) as Root;
+                }
+                if (root == null)
+                {
+                    InitEmptyMap();
+                }
+                else
+                {
+                    Map = ParserMap.ParseMap(root.Map);
+                    MapTiles = ParserTiles.Parse(root.MapTiles);
+                    PlayerTile = ParserTiles.Parse(root.PlayerTiles);
+                    ParserMap.ParseMapMaxMinXY(Map, MapTiles);
+                    ParserMap.ParseOffsetXY(Map);
+                    ParserTiles.ParseTilesNewXY(Map, MapTiles);
+                    ParserTiles.ParseTilesNewXY(Map, PlayerTile);
 
-                Control = ParserMap.ParseControl(root.Control);
-                (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles);
+                    Control = ParserMap.ParseControl(root.Control);
+                    (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles);
                 
-                ParserMap.ParseMapMaxMinXY(Control, ControlTiles, NameTiles);
-                ParserMap.ParseOffsetXY(Control);
-                ParserTiles.ParseTilesNewXY(Control, ControlTiles, NameTiles);
+                    ParserMap.ParseMapMaxMinXY(Control, ControlTiles, NameTiles);
+                    ParserMap.ParseOffsetXY(Control);
+                    ParserTiles.ParseTilesNewXY(Control, ControlTiles, NameTiles);
 
-                PlayerTile.MapTiles = MapTiles;
+                    PlayerTile.MapTiles = MapTiles;
 
-                AvailableControlTiles = ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 0);
-                AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 1));
-                AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));
+                    AvailableControlTiles = ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 0);
+                    AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 1));
+                    AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));
 
-                AvailableControlT = new ModelControl() { MapAreaWidth = 200, MapAreaHeight = 150 };
-                ParserMap.ParseMapMaxMinXY(AvailableControlT, AvailableControlTiles);
-                ParserMap.ParseOffsetXY(AvailableControlT);
-                ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);
+                    AvailableControlT = new ModelControl() { MapAreaWidth = 200, MapAreaHeight = 150 };
+                    ParserMap.ParseMapMaxMinXY(AvailableControlT, AvailableControlTiles);
+                    ParserMap.ParseOffsetXY(AvailableControlT);
+                    ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);
 
+                    PlayerController = new ModelPlayerController(PlayerTile, ControlTiles);
+                }
             }
-            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles);
         }
     }
 }

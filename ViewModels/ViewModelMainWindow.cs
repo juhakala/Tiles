@@ -27,6 +27,7 @@ namespace WpfTiles.ViewModels
 
         public ViewModelControlsItemControl AvailableControlsControlWM { get; set; }
         public ViewModelPlayerController PlayerControllerWM { get; set; }
+        public ViewModelLevelSelectorController LevelSelectorControllerWM { get; set; }
 
         public ICommand SetSelectedCommand => new RelayCommand(o => SetSelectedMethod());
 
@@ -73,6 +74,7 @@ namespace WpfTiles.ViewModels
 
             AvailableControlsControlWM = new ViewModelControlsItemControl(cont);
             PlayerControllerWM = new ViewModelPlayerController(cont);
+            LevelSelectorControllerWM = new ViewModelLevelSelectorController(cont);
             StartPlayerAnimEvent += cont.HandleCustomEvent;
         }
         private ObservableCollection<TileItem> PopulateCanvasMapItems(List<TileItem> tiles, PlayerTileItem player)

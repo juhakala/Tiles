@@ -24,6 +24,8 @@ namespace Resources.Schemas.XMLSchema1 {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://tempuri.org/XMLSchema1.xsd", IsNullable=false)]
     public partial class Root {
         
+        private LevelInformationType levelInformationField;
+        
         private MapType mapField;
         
         private MapTilesType mapTilesField;
@@ -35,6 +37,16 @@ namespace Resources.Schemas.XMLSchema1 {
         private ControlTilesType controlTilesField;
         
         private AvailableControlTilesType availableControlTilesField;
+        
+        /// <remarks/>
+        public LevelInformationType LevelInformation {
+            get {
+                return this.levelInformationField;
+            }
+            set {
+                this.levelInformationField = value;
+            }
+        }
         
         /// <remarks/>
         public MapType Map {
@@ -93,63 +105,6 @@ namespace Resources.Schemas.XMLSchema1 {
             }
             set {
                 this.availableControlTilesField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.4084.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/XMLSchema1.xsd")]
-    public partial class MapType {
-        
-        private string nameField;
-        
-        private LevelInformationType levelInformationField;
-        
-        private uint widthField;
-        
-        private uint heightField;
-        
-        /// <remarks/>
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public LevelInformationType LevelInformation {
-            get {
-                return this.levelInformationField;
-            }
-            set {
-                this.levelInformationField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public uint Width {
-            get {
-                return this.widthField;
-            }
-            set {
-                this.widthField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public uint Height {
-            get {
-                return this.heightField;
-            }
-            set {
-                this.heightField = value;
             }
         }
     }
@@ -494,6 +449,51 @@ namespace Resources.Schemas.XMLSchema1 {
             }
             set {
                 this.idFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/XMLSchema1.xsd")]
+    public partial class MapType {
+        
+        private string nameField;
+        
+        private uint widthField;
+        
+        private uint heightField;
+        
+        /// <remarks/>
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public uint Width {
+            get {
+                return this.widthField;
+            }
+            set {
+                this.widthField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public uint Height {
+            get {
+                return this.heightField;
+            }
+            set {
+                this.heightField = value;
             }
         }
     }

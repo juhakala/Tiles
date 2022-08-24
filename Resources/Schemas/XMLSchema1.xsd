@@ -55,14 +55,13 @@
 		<xs:sequence>
 			<xs:element name="MajorLevel" type="xs:unsignedInt" />
 			<xs:element name="MinorLevel" type="xs:unsignedInt" />
-			<xs:element name="MicroLevel" type="xs:unsignedInt" />
+			<xs:element name="MicroLevel" type="xs:unsignedInt" /><!--not yet used?-->
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="MapType">
 		<xs:sequence>
 			<xs:element name="Name" type="xs:string" />
-			<xs:element name="LevelInformation" type="LevelInformationType" minOccurs="1" maxOccurs="1" />
 			<xs:element name="Width" type="xs:unsignedInt" />
 			<xs:element name="Height" type="xs:unsignedInt" />
 		</xs:sequence>
@@ -88,6 +87,7 @@
 	<xs:element name="Root">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="LevelInformation" type="LevelInformationType" minOccurs="1" maxOccurs="1" />
 				<xs:element name="Map" type="MapType" minOccurs="1" maxOccurs="1" />
 				<xs:element name="MapTiles" type="MapTilesType" minOccurs="1" maxOccurs="1" />
 				<xs:element name="PlayerTiles" type="PlayerTilesType" minOccurs="1" maxOccurs="1" />
