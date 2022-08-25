@@ -28,6 +28,8 @@ namespace WpfTiles.ViewModels
         public ViewModelControlsItemControl AvailableControlsControlWM { get; set; }
         public ViewModelPlayerController PlayerControllerWM { get; set; }
         public ViewModelLevelSelectorController LevelSelectorControllerWM { get; set; }
+        public ViewModelStepsController StepsControllerVM { get; set; }
+
 
         public ICommand SetSelectedCommand => new RelayCommand(o => SetSelectedMethod());
 
@@ -48,16 +50,6 @@ namespace WpfTiles.ViewModels
             }
         }
 
-        public ICommand StartPlayerAnimCommand => new RelayCommand(o => StartPlayerAnimMethod());
-
-        public event EventHandler StartPlayerAnimEvent;
-
-        private void StartPlayerAnimMethod()
-        {
-            EventHandler handler = StartPlayerAnimEvent;
-            handler?.Invoke(this, new EventArgs());
-        }
-
         public void LoadMapFromContEvent(object sender, LevelLoaderEvent e)
         {
             LoadMapFromCont(e.mCont);
@@ -72,6 +64,7 @@ namespace WpfTiles.ViewModels
             NotifyPropertyChanged(nameof(AvailableControlsControlWM));
             NotifyPropertyChanged(nameof(PlayerControllerWM));
             NotifyPropertyChanged(nameof(LevelSelectorControllerWM));
+            NotifyPropertyChanged(nameof(StepsControllerVM));
         }
         private void LoadMapFromCont(ModelGameController cont)
         {
@@ -86,6 +79,7 @@ namespace WpfTiles.ViewModels
             AvailableControlsControlWM = new ViewModelControlsItemControl(cont);
             PlayerControllerWM = new ViewModelPlayerController(cont);
             LevelSelectorControllerWM = new ViewModelLevelSelectorController(cont);
+            StepsControllerVM = new ViewModelStepsController(cont);
         }
 
         public ViewModelMainWindow(ModelGameController cont)
@@ -97,8 +91,6 @@ namespace WpfTiles.ViewModels
             CanvasControlAreaHeight = cont.Control.MapAreaHeight;
 
             LoadMapFromCont(cont);
-
-            StartPlayerAnimEvent += cont.HandleCustomEvent;
         }
         private ObservableCollection<TileItem> PopulateCanvasMapItems(List<TileItem> tiles, PlayerTileItem player)
         {

@@ -66,25 +66,35 @@ namespace WpfTiles.Model
                 Direction--;
             }));
         }
-        public void MakeSignMove(ControlTileItem item)
+        public bool MakeSignMove(ControlTileItem item)
         {
             switch (item.Sign)
             {
                 case (int)ENUM_SignTypes.Forward:
                     if (MoveValidator.ValidateForwardMove(this, item, MapTiles))
+                    {
                         MoveForward();
+                        return true;
+                    }
                     break;
                 case (int)ENUM_SignTypes.RotateRight:
                     if (MoveValidator.ValidateRotation(this, item, MapTiles))
+                    {
                         RotateRight();
+                        return true;
+                    }
                     break;
                 case (int)ENUM_SignTypes.RotateLeft:
                     if (MoveValidator.ValidateRotation(this, item, MapTiles))
+                    {
                         RotateLeft();
+                        return true;
+                    }
                     break;
                 default:
                     throw new NotImplementedException($"PlayerTileItem.MakeSignMove sign: '{item.Sign}'");
             }
+            return false;
         }
         public bool ValidateMoveSet(TileItem item)
         {

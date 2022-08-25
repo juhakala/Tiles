@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WpfTiles.Common;
 
 namespace WpfTiles.Model
 {
@@ -13,18 +15,15 @@ namespace WpfTiles.Model
         ADD,
         REMOVE,
     }
-    public class PlayerMovesCollectionChangedEventArgs : EventArgs
-    {
-        public ENUM_PlayerMovesCollectionChangedType ChangeType { get; set; }
-        public ControlTileItem Item { get; set; }
-    }
     class ModelPlayerController
     {
+        private CancellationToken _Ct;
+        private CancellationTokenSource _Src;
         public PlayerTileItem Player { get; set; }
         public List<ControlTileItem> ControlTiles { get; set; }
         public List<ControlTileItem> PlayerMoves { get; set; }
-
         public event EventHandler<PlayerMovesCollectionChangedEventArgs> PlayerMovesCollectionChanged;
+        public event EventHandler<PlayerMoveMadeEventArgs> PlayerMoveMadeEventHandler;
 
         private void AddToPlayerMoves(ControlTileItem item, int index)
         {
@@ -32,7 +31,7 @@ namespace WpfTiles.Model
                 PlayerMoves.Insert(index, item);
             else
                 PlayerMoves.Add(item);
-            PlayerMovesCollectionChangedMethod(ENUM_PlayerMovesCollectionChangedType.ADD, item);
+            PlayerMovesCollectionChangedMethod(ENUM_PlayerMovesCollectionChangedType.ADD, item, index);
         }
 
         private void RemoveFromPlayerMoves(ControlTileItem item, int index)
@@ -40,16 +39,26 @@ namespace WpfTiles.Model
             if (index < 0 || index > PlayerMoves.Count - 1)
                 return;
             PlayerMoves.RemoveAt(index);
-            PlayerMovesCollectionChangedMethod(ENUM_PlayerMovesCollectionChangedType.REMOVE, item);
+            PlayerMovesCollectionChangedMethod(ENUM_PlayerMovesCollectionChangedType.REMOVE, item, index);
         }
 
-        private void PlayerMovesCollectionChangedMethod(ENUM_PlayerMovesCollectionChangedType type, ControlTileItem item)
+        private void PlayerMovesCollectionChangedMethod(ENUM_PlayerMovesCollectionChangedType type, ControlTileItem item, int index)
         {
             EventHandler< PlayerMovesCollectionChangedEventArgs> handler = PlayerMovesCollectionChanged;
             var args = new PlayerMovesCollectionChangedEventArgs()
             {
                 ChangeType = type,
                 Item = item,
+                Index = index,
+            };
+            handler?.Invoke(this, args);
+        }
+        private void PlayerMoveMadeEventMethod(int index)
+        {
+            EventHandler<PlayerMoveMadeEventArgs> handler = PlayerMoveMadeEventHandler;
+            var args = new PlayerMoveMadeEventArgs()
+            {
+                Index = index,
             };
             handler?.Invoke(this, args);
         }
@@ -95,35 +104,55 @@ namespace WpfTiles.Model
 
         private async Task PlayerMoveSetTask(Dictionary<uint, List<ControlTileItem>> moveSetDict)
         {
-            for (int i = 0; i < PlayerMoves.Count(); i++)
+            try
             {
-                await Task.Run(() =>
+                for (int i = 0; i < PlayerMoves.Count(); i++)
                 {
-                    if (PlayerMoves[i].Sign != -1)
+                    _Ct.ThrowIfCancellationRequested();
+                    await Task.Run(() =>
                     {
-                        Player.MakeSignMove(PlayerMoves[i]);
-                    }
-                    else if (!string.IsNullOrEmpty(PlayerMoves[i].Name))
-                    {
-                        var tmp = UInt32.Parse(PlayerMoves[i].Name.Replace("f", ""));
-                        if (Player.ValidateMoveSet(PlayerMoves[i]))
-                            System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
+                        _Ct.ThrowIfCancellationRequested();
+                        if (PlayerMoves[i].Sign != -1)
+                        {
+                            if (Player.MakeSignMove(PlayerMoves[i]));
+                                PlayerMoveMadeEventMethod(i);
+                        }
+                        else if (!string.IsNullOrEmpty(PlayerMoves[i].Name))
+                        {
+                            var tmp = UInt32.Parse(PlayerMoves[i].Name.Replace("f", ""));
+                            if (Player.ValidateMoveSet(PlayerMoves[i]))
                             {
-                                AddMoveSet(moveSetDict[tmp], i, i);
-                            }));
-                        i--;
-                    }
-                });
-                await Task.Delay(2000);
+                                System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
+                                {
+                                    AddMoveSet(moveSetDict[tmp], i, i);
+                                }));
+                                i--;
+                            }
+                        }
+                    }, _Ct);
+
+                    await Task.Delay(2000, _Ct);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return;
             }
         }
 
         public void StartMoveSet()
         {
+            if (_Src != null)
+            {
+                //cancel atm running player and reset player and arena
+                _Src.Cancel();
+            }
             var moveSetDict = InitMoveSetDict(); 
             PlayerMoves = new List<ControlTileItem>();
             AddMoveSet(moveSetDict.FirstOrDefault().Value);
-            var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(moveSetDict));
+            _Src = new CancellationTokenSource();
+            _Ct = _Src.Token;
+            var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(moveSetDict), _Ct);
             //PlayerMovementTask.ContinueWith(); //check result
             PlayerMovementTask.Start();
         }

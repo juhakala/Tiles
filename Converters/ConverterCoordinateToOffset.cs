@@ -15,9 +15,16 @@ namespace WpfTiles.Converters
         {
             if (values.Length == 2)
             {
-                var tmp = (uint)(values[0]) * (int)ENUM_TileSizes.MapBackground + (int)(values[1]);
-                return (double)((uint)(values[0]) * (int)ENUM_TileSizes.MapBackground + (int)(values[1]));
+                if (parameter is bool && (bool)parameter == false)
+                {
+                    var tmp = (int)(values[1]) + (double)((int)(values[0]) * (int)ENUM_TileSizes.MapBackground);
+                    return (int)(values[1]) + (double)((int)(values[0]) * (int)ENUM_TileSizes.MapBackground); //to negative
+
+                }
+                else
+                    return (double)((uint)(values[0]) * (int)ENUM_TileSizes.MapBackground + (int)(values[1])); //to positive
             }
+
             throw new NotImplementedException();
         }
 

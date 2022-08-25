@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace WpfTiles.Model
 {
-    public class TileItem : NotifyPropertyChangedBase
+    public class TileItem : NotifyPropertyChangedBase, ITileItem
     {
         private uint _X;
         private uint _Y;

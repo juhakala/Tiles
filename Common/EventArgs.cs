@@ -24,4 +24,14 @@ namespace WpfTiles.Common
             mCont = cont;
         }
     }
+    class PlayerMovesCollectionChangedEventArgs : EventArgs
+    {
+        public ENUM_PlayerMovesCollectionChangedType ChangeType { get; set; }
+        public ControlTileItem Item { get; set; }
+        public int Index { get; set; }
+    }
+    class PlayerMoveMadeEventArgs : EventArgs
+    {
+        public int Index { get; set; }
+    }
 }

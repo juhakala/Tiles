@@ -14,7 +14,7 @@ namespace WpfTiles.Model
         RotateRight,
         RotateLeft,
     }
-    public class ControlTileItem : TileItem
+    public class ControlTileItem : TileItem, ITileItem, IControlTileItem
     {
         private int _Sign;
         public int Sign
@@ -80,9 +80,9 @@ namespace WpfTiles.Model
             Height = baseItem.Height;
             Color = baseItem.Color;
         }
-        public ControlTileItem Clone()
+        public T Clone<T>() where T : IControlTileItem, new()
         {
-            var res = new ControlTileItem();
+            var res = new T();
             res.Name = Name;
             res.X = X;
             res.Y = Y;
@@ -91,7 +91,7 @@ namespace WpfTiles.Model
             res.Color = Color;
             res.Sign = Sign;
             res.Selected = Selected;
-            return res;
+            return (T)res;
         }
     }
 }

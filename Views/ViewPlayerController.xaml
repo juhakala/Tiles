@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:WpfTiles.Views"
              xmlns:models="clr-namespace:WpfTiles.Model"
              xmlns:converters="clr-namespace:WpfTiles.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -26,8 +27,11 @@
                 <Setter Property="Canvas.Left">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
-                            <Binding Path="X " />
+                            <Binding Path="VideoOffset" />
                             <Binding Path="DataContext.ControlHalfWay" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                            <MultiBinding.ConverterParameter>
+                                <sys:Boolean>False</sys:Boolean>
+                            </MultiBinding.ConverterParameter>
                         </MultiBinding>
                     </Setter.Value>
                 </Setter>
@@ -42,7 +46,7 @@
             </Style>
         </ItemsControl.ItemContainerStyle>
         <ItemsControl.Resources>
-            <DataTemplate DataType="{x:Type models:ControlTileItem}">
+            <DataTemplate DataType="{x:Type models:PlaybackTileItem}">
                 <Grid>
                     <Grid.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />

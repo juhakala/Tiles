@@ -27,7 +27,7 @@ namespace WpfTiles.Model
 
         public List<ControlTileItem> AvailableControlTiles { get; set; }
 
-        public void HandleCustomEvent(object sender, EventArgs e)
+        public void StartPlayerAnimEvent(object sender, EventArgs e)
         {
             PlayerController.StartMoveSet();
         }
