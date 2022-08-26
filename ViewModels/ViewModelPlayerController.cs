@@ -11,6 +11,7 @@ namespace WpfTiles.ViewModels
 {
     class ViewModelPlayerController : ViewModelBase
     {
+        private int _Offset;
         public ObservableCollection<PlaybackTileItem> PlayerMovesCollection { get; set; }
         public int ControlHalfWay { get; set; }
         public ViewModelPlayerController(ModelGameController cont)
@@ -24,17 +25,26 @@ namespace WpfTiles.ViewModels
         {
             if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.ADD)
             {
+                _Offset++;
                 var tmpItem = e.Item.Clone<PlaybackTileItem>();
                 tmpItem.X = 0;
                 if (e.Index == -1)
-                    tmpItem.VideoOffset = PlayerMovesCollection.Count;
+                    tmpItem.VideoOffset = PlayerMovesCollection.Count - _Offset;
                 else
-                    tmpItem.VideoOffset = e.Index;
+                    tmpItem.VideoOffset = e.Index - _Offset;
                 PlayerMovesCollection.Add(tmpItem);
             }
             else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.REMOVE)
             {
                 //PlayerMovesCollection.Remove(e.Item.Clone()); // need some indexat or something to determine what object to remove
+            }
+            else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.HISTORY_FORWARD)
+            {
+                throw new NotImplementedException($"ViewModelPlayerController.UpdatePlayerMovesCollection:'{e.ChangeType}'");
+            }
+            else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.HISTORY_BACKWARD)
+            {
+                throw new NotImplementedException($"ViewModelPlayerController.UpdatePlayerMovesCollection:'{e.ChangeType}'");
             }
             else
             {

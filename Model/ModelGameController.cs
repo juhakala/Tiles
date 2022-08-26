@@ -24,7 +24,6 @@ namespace WpfTiles.Model
         public List<ControlTileItem> ControlTiles { get; set; }
         public List<NameTileItem> NameTiles { get; set; }
 
-
         public List<ControlTileItem> AvailableControlTiles { get; set; }
 
         public void StartPlayerAnimEvent(object sender, EventArgs e)
@@ -64,6 +63,7 @@ namespace WpfTiles.Model
                 InitEmptyMap();
                 return;
             }
+
             Map = ParserMap.ParseMap(root.Map);
             MapTiles = ParserTiles.Parse(root.MapTiles);
             PlayerTile = ParserTiles.Parse(root.PlayerTiles);
