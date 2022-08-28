@@ -14,6 +14,7 @@ namespace WpfTiles.Model
     {
         ADD,
         REMOVE,
+        NORMAL_FORWARD,
         HISTORY_FORWARD,
         HISTORY_BACKWARD,
     }
@@ -23,6 +24,7 @@ namespace WpfTiles.Model
         private CancellationTokenSource _Src;
         private int _PlayerMovesIndex;
         private Dictionary<uint, List<ControlTileItem>> _MoveSetDict;
+        private int _HistoryOffsetIndex;
 
         public PlayerTileItem Player { get; set; }
         public List<ControlTileItem> ControlTiles { get; set; }
@@ -30,7 +32,7 @@ namespace WpfTiles.Model
         public List<ControlTileItem> PlayerMoveHistoryTiles { get; set; } = new List<ControlTileItem>();
 
         public event EventHandler<PlayerMovesCollectionChangedEventArgs> PlayerMovesCollectionChanged;
-        public event EventHandler<PlayerMoveMadeEventArgs> PlayerMoveMadeEventHandler;
+        public event EventHandler<PlayerMovesCollectionChangedEventArgs> PlayerMoveMadeEventHandler;
 
         private void AddToPlayerMoves(ControlTileItem item, int index)
         {
@@ -60,11 +62,13 @@ namespace WpfTiles.Model
             };
             handler?.Invoke(this, args);
         }
-        private void PlayerMoveMadeEventMethod(int index)
+        private void PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType type, int index)
         {
-            EventHandler<PlayerMoveMadeEventArgs> handler = PlayerMoveMadeEventHandler;
-            var args = new PlayerMoveMadeEventArgs()
+            EventHandler<PlayerMovesCollectionChangedEventArgs> handler = PlayerMoveMadeEventHandler;
+            var args = new PlayerMovesCollectionChangedEventArgs()
             {
+                ChangeType = type,
+                Item = PlayerMoves[_PlayerMovesIndex],
                 Index = index,
             };
             handler?.Invoke(this, args);
@@ -121,18 +125,25 @@ namespace WpfTiles.Model
         {
             await Task.Run(() =>
             {
-                if (_PlayerMovesIndex == PlayerMoveHistoryTiles.Count)
+                if (_HistoryOffsetIndex == 0) // make normal move
                 {
-                    PlayerMoveSetAdvanceOne();
+                    if (_PlayerMovesIndex < PlayerMoves.Count)
+                    {
+                        PlayerMoveSetAdvanceOne();
+                        _PlayerMovesIndex++;
+                    }
+                    else
+                    {
+                        //no more moves left in bank
+                        // show error that not passed?
+                        throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                    }
                 }
-                else if (_PlayerMovesIndex < PlayerMoveHistoryTiles.Count)
+                else //make history move
                 {
-
-                }
-                else
-                {
-                    //should not be possible?
-                    throw new InvalidOperationException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoveHistoryTiles.Count:{PlayerMoveHistoryTiles.Count}");
+                    //and advance from history tiles (with last?)
+                    //think is need to add fcalls too to history tiles since coloring will be there?
+                    _HistoryOffsetIndex++;
                 }
             });
         }
@@ -144,7 +155,7 @@ namespace WpfTiles.Model
                 if (Player.MakeSignMove(PlayerMoves[_PlayerMovesIndex]))
                 {
                     PlayerMoveHistoryTiles.Add(PlayerMoves[_PlayerMovesIndex]);
-                    PlayerMoveMadeEventMethod(_PlayerMovesIndex);
+                    PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, _PlayerMovesIndex);
                 }
             }
             else if (!string.IsNullOrEmpty(PlayerMoves[_PlayerMovesIndex].Name))

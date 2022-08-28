@@ -25,7 +25,6 @@ namespace WpfTiles.ViewModels
         {
             if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.ADD)
             {
-                _Offset++;
                 var tmpItem = e.Item.Clone<PlaybackTileItem>();
                 tmpItem.X = 0;
                 if (e.Index == -1)
@@ -51,12 +50,17 @@ namespace WpfTiles.ViewModels
                 throw new NotImplementedException($"ViewModelPlayerController.UpdatePlayerMovesCollection:'{e.ChangeType}'");
             }
         }
-        private void PlayerMoveMade(object sender, PlayerMoveMadeEventArgs e)
+        private void PlayerMoveMade(object sender, PlayerMovesCollectionChangedEventArgs e)
         {
-            foreach (var item in PlayerMovesCollection)
+            if (ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD == e.ChangeType) // && ENUM_PlayerMovesCollectionChangedType.HISTORY_FORWARD == e.ChangeType
             {
-                item.VideoOffset -= 1;
+                _Offset++;
+                foreach (var item in PlayerMovesCollection)
+                {
+                    item.VideoOffset -= 1;
+                }
             }
+            
         }
     }
 }

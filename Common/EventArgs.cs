@@ -30,8 +30,4 @@ namespace WpfTiles.Common
         public ControlTileItem Item { get; set; }
         public int Index { get; set; }
     }
-    class PlayerMoveMadeEventArgs : EventArgs
-    {
-        public int Index { get; set; }
-    }
 }
