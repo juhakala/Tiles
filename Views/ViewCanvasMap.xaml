@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="WpfTiles.Views.ViewCanvasMap"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfTiles.Views"
+             xmlns:models="clr-namespace:WpfTiles.Model"
+             xmlns:converters="clr-namespace:WpfTiles.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400">
+    <UserControl.Resources>
+        <converters:ConverterCoordinateToOffset x:Key="ConverterCoordinateToOffset" />
+        <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
+        <converters:ConverterStringToVisibility x:Key="ConverterStringToVisibility" />
+        <converters:ConverterDirectionToAngle x:Key="ConverterDirectionToAngle" />
+    </UserControl.Resources>
+    <ItemsControl ItemsSource="{Binding CanvasMapItems}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas
+                    Background="LightGray"
+                    />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerStyle>
+            <Style TargetType="ContentPresenter">
+                <Setter Property="Canvas.Left">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                            <Binding Path="X" />
+                            <Binding Path="DataContext.CanvasMapOffsetX" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Canvas.Top">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                            <Binding Path="Y" />
+                            <Binding Path="DataContext.CanvasMapOffsetY" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+        <ItemsControl.Resources>
+            <DataTemplate DataType="{x:Type models:TileItem}">
+                <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}" Focusable="True">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type models:PlayerTileItem}">
+                <Grid>
+                    <Ellipse
+                            Name="MyPlayerEllipse"
+                            Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Color}">
+                        <Ellipse.Stroke>
+                            <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
+                        </Ellipse.Stroke>
+                    </Ellipse>
+                    <Polygon Points="3,1 10,5, 3,9" Stroke="Black" Fill="Black"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Polygon.LayoutTransform>
+                            <RotateTransform Angle="{Binding Path=Direction, Converter={StaticResource ConverterDirectionToAngle}, UpdateSourceTrigger=PropertyChanged}" />
+                        </Polygon.LayoutTransform>
+                    </Polygon>
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.Resources>
+    </ItemsControl>
+</UserControl>

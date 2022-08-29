@@ -28,13 +28,33 @@ namespace WpfTiles.ViewModels
                 var tmpItem = e.Item.Clone<PlaybackTileItem>();
                 tmpItem.X = 0;
                 if (e.Index == -1)
-                    tmpItem.VideoOffset = PlayerMovesCollection.Count - _Offset;
+                    tmpItem.VideoOffset = PlayerMovesCollection.Count - _Offset; //add to end
                 else
-                    tmpItem.VideoOffset = e.Index - _Offset;
+                {
+                    tmpItem.VideoOffset = e.Index - _Offset; //add to middle from f[int]call
+                    foreach (var item in PlayerMovesCollection)
+                    {
+                        if (item.VideoOffset >= tmpItem.VideoOffset)
+                            item.VideoOffset++; //move later items to right
+                    }
+                }
                 PlayerMovesCollection.Add(tmpItem);
             }
             else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.REMOVE)
             {
+                if (e.Index == -1)
+                {
+                    PlayerMovesCollection.RemoveAt(PlayerMovesCollection.Count - 1); // from end, not used atm since will be handled with index place
+                }
+                else if (e.Index < PlayerMovesCollection.Count)
+                {
+                    PlayerMovesCollection.RemoveAt(e.Index); //from middle, should be fcall first name tile replacement
+                }
+                else
+                {
+                    //error should not be possible?
+                    throw new InvalidOperationException($"ViewModelPlayerController.UpdatePlayerMovesCollection => e.type:{e.ChangeType}, e.index:{e.Index}, PlayermovesCollection.count:{PlayerMovesCollection.Count}");
+                }
                 //PlayerMovesCollection.Remove(e.Item.Clone()); // need some indexat or something to determine what object to remove
             }
             else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.HISTORY_FORWARD)
