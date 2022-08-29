@@ -59,10 +59,11 @@ namespace WpfTiles.Model
                 ChangeType = type,
                 Item = item,
                 Index = index,
+                Id = item.Id,
             };
             handler?.Invoke(this, args);
         }
-        private void PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType type, int index)
+        private void PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType type, ControlTileItem item, int index)
         {
             EventHandler<PlayerMovesCollectionChangedEventArgs> handler = PlayerMoveMadeEventHandler;
             var args = new PlayerMovesCollectionChangedEventArgs()
@@ -70,6 +71,7 @@ namespace WpfTiles.Model
                 ChangeType = type,
                 Item = PlayerMoves[_PlayerMovesIndex],
                 Index = index,
+                Id = item.Id,
             };
             handler?.Invoke(this, args);
         }
@@ -97,16 +99,16 @@ namespace WpfTiles.Model
             return rDict;
         }
 
-        private void AddMoveSet(List<ControlTileItem> mlst, int indexToAdd = -1, int indexToRemove = -1)
+        private void AddMoveSet(uint movesetDictIndex, int indexToAdd = -1, int indexToRemove = -1)
         {
-            if (mlst == null)
+            if (_MoveSetDict == null)
             {
                 //relevant error logging
                 throw new NotImplementedException($"ModelPlayerController.AddMoveSet mlst null");
             }
-            if (indexToRemove != -1 && mlst.FirstOrDefault() != null)
-                RemoveFromPlayerMoves(mlst.First(), indexToRemove);
-            foreach (var item in mlst)
+            if (indexToRemove != -1)
+                RemoveFromPlayerMoves(PlayerMoves[indexToRemove], indexToRemove);
+            foreach (var item in _MoveSetDict[movesetDictIndex])
             {
                 AddToPlayerMoves(item, indexToAdd);
                 indexToAdd = indexToAdd != -1 ? indexToAdd + 1: indexToAdd;
@@ -152,23 +154,34 @@ namespace WpfTiles.Model
         {
             if (PlayerMoves[_PlayerMovesIndex].Sign != -1)
             {
+                // for move tiles
                 if (Player.MakeSignMove(PlayerMoves[_PlayerMovesIndex]))
                 {
                     PlayerMoveHistoryTiles.Add(PlayerMoves[_PlayerMovesIndex]);
-                    PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, _PlayerMovesIndex);
                 }
+                PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, PlayerMoves[_PlayerMovesIndex], _PlayerMovesIndex);
             }
             else if (!string.IsNullOrEmpty(PlayerMoves[_PlayerMovesIndex].Name))
             {
+                // for fcall tiles
                 var tmp = UInt32.Parse(PlayerMoves[_PlayerMovesIndex].Name.Replace("f", ""));
                 if (Player.ValidateMoveSet(PlayerMoves[_PlayerMovesIndex]))
                 {
                     System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
                     {
-                        AddMoveSet(_MoveSetDict[tmp], _PlayerMovesIndex, _PlayerMovesIndex);
+                        AddMoveSet(tmp, _PlayerMovesIndex, _PlayerMovesIndex);
                     }));
                     _PlayerMovesIndex--;
                 }
+                else
+                {
+                    PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, PlayerMoves[_PlayerMovesIndex], _PlayerMovesIndex);
+                }
+            }
+            else
+            {
+                // for empty tiles
+                PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, PlayerMoves[_PlayerMovesIndex], _PlayerMovesIndex);
             }
         }
 
@@ -204,7 +217,7 @@ namespace WpfTiles.Model
             PlayerMoveHistoryTiles = new List<ControlTileItem>();
             _MoveSetDict = InitMoveSetDict();
             PlayerMoves = new List<ControlTileItem>();
-            AddMoveSet(_MoveSetDict.FirstOrDefault().Value);
+            AddMoveSet(_MoveSetDict.FirstOrDefault().Key);
             _Src = new CancellationTokenSource();
             _Ct = _Src.Token;
         }

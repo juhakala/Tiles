@@ -48,7 +48,18 @@ namespace WpfTiles.ViewModels
                 }
                 else if (e.Index < PlayerMovesCollection.Count)
                 {
-                    PlayerMovesCollection.RemoveAt(e.Index); //from middle, should be fcall first name tile replacement
+                    var tmpItem = PlayerMovesCollection.FirstOrDefault(o => o.Id == e.Id);
+                    if (tmpItem == null)
+                    {
+                        throw new InvalidOperationException($"ViewModelPlayerController.UpdatePlayerMovesCollection => tmpItem:{tmpItem}");
+                    }
+                    foreach (var item in PlayerMovesCollection)
+                    {
+                        if (item.VideoOffset > tmpItem.VideoOffset)
+                            item.VideoOffset--;
+                    }
+                    PlayerMovesCollection.Remove(tmpItem); //from middle, should be fcall first name tile replacement
+
                 }
                 else
                 {

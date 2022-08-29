@@ -29,5 +29,6 @@ namespace WpfTiles.Common
         public ENUM_PlayerMovesCollectionChangedType ChangeType { get; set; }
         public ControlTileItem Item { get; set; }
         public int Index { get; set; }
+        public int Id { get; set; }
     }
 }

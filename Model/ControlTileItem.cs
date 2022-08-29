@@ -16,6 +16,22 @@ namespace WpfTiles.Model
     }
     public class ControlTileItem : TileItem, ITileItem, IControlTileItem
     {
+        private static int IdCounter = 0;
+
+        private int _Id = -1;
+        public int Id
+        {
+            get
+            {
+                if (_Id == -1)
+                    _Id = IdCounter++;
+                return _Id;
+            }
+            set
+            {
+                _Id = value;
+            }
+        }
         private int _Sign;
         public int Sign
         {
@@ -91,6 +107,7 @@ namespace WpfTiles.Model
             res.Color = Color;
             res.Sign = Sign;
             res.Selected = Selected;
+            res.Id = Id;
             return (T)res;
         }
     }

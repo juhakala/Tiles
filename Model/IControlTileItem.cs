@@ -8,6 +8,7 @@ namespace WpfTiles.Model
 {
     public interface IControlTileItem : ITileItem
     {
+        public int Id { get; set; }
         public int Sign { get; set; }
         public string Name { get; set; }
         public bool Selected { get; set; }
