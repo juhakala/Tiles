@@ -33,6 +33,15 @@ namespace WpfTiles.ViewModels
 
         public ICommand SetSelectedCommand => new RelayCommand(o => SetSelectedMethod());
 
+        private void RemoveOtherSelectionsFromCanvasControlItems(object sender, ControlTileIdEventArgs e)
+        {
+            var itemsToClear = CanvasControlItems.ToList().FindAll(o => o is ControlTileItem co && co.Selected && co.Id != e.Id).Cast<ControlTileItem>().ToList();
+            foreach (var item in itemsToClear)
+            {
+                item.Selected = false;
+            }
+        }
+
         private void SetSelectedMethod()
         {
             var availableSelections = AvailableControlsControlWM.ObsLst.Cast<ControlTileItem>().ToList().FindAll(o => o.Selected);
@@ -104,7 +113,13 @@ namespace WpfTiles.ViewModels
             var lst = new List<TileItem>();
             lst.AddRange(nameTiles);
             lst.AddRange(controlTiles);
+            var itemsToHook = lst.FindAll(o => o is ControlTileItem co).Cast<ControlTileItem>().ToList();
+            foreach (var item in itemsToHook)
+            {
+                item.TileSelectedHandler += RemoveOtherSelectionsFromCanvasControlItems;
+            }
             var res = new ObservableCollection<TileItem>(lst);
+
             return res;
         }
     }

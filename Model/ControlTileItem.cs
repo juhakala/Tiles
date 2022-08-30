@@ -76,8 +76,17 @@ namespace WpfTiles.Model
 
         public ICommand LeftClickCommand => new RelayCommand(o => SetSelected());
 
+        public EventHandler<ControlTileIdEventArgs> TileSelectedHandler;
+
+        private void TileSelectedInvoker()
+        {
+            EventHandler<ControlTileIdEventArgs> handler = TileSelectedHandler;
+            handler?.Invoke(this, new ControlTileIdEventArgs() { Id = Id});
+        }
+
         private void SetSelected()
         {
+            TileSelectedInvoker();
             Selected = !Selected;
         }
 

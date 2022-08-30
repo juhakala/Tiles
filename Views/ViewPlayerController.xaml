@@ -8,77 +8,110 @@
              xmlns:converters="clr-namespace:WpfTiles.Converters"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="70" d:DesignWidth="400">
     <UserControl.Resources>
         <converters:ConverterCoordinateToOffset x:Key="ConverterCoordinateToOffset" />
         <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
         <converters:ConverterStringToVisibility x:Key="ConverterStringToVisibility" />
+        <converters:ConverterBoolToVisibility x:Key="ConverterBoolToVisibility" />
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding PlayerMovesCollection}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas
-                    Background="LightGray"
-                    />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemContainerStyle>
-            <Style TargetType="ContentPresenter">
-                <Setter Property="Canvas.Left">
-                    <Setter.Value>
-                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
-                            <Binding Path="VideoOffset" />
-                            <Binding Path="DataContext.ControlHalfWay" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
-                            <MultiBinding.ConverterParameter>
-                                <sys:Boolean>False</sys:Boolean>
-                            </MultiBinding.ConverterParameter>
-                        </MultiBinding>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Canvas.Top" Value="10" />
-                <!--<Setter.Value>
-                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
-                            <Binding Path="Y" />
-                            <Binding Path="DataContext.CanvasAvailableControlOffsetY" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
-                        </MultiBinding>
-                    </Setter.Value>
-                </Setter>-->
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-        <ItemsControl.Resources>
-            <DataTemplate DataType="{x:Type models:PlaybackTileItem}">
-                <Grid>
-                    <Grid.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
-                    </Grid.InputBindings>
-                    <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
-                        <Rectangle.Style>
-                            <Style TargetType="Rectangle">
-                                <Setter Property="Stroke" Value="Black" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=Selected}" Value="True">
-                                        <Setter Property="Stroke" Value="Yellow" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Rectangle.Style>
-                    </Rectangle>
-                    <Rectangle Width="{Binding ImgWidth}" Height="{Binding ImgWidth}">
-                        <Rectangle.Style>
-                            <Style TargetType="Rectangle">
-                                <Setter Property="Fill">
-                                    <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource ConverterSignToImage}">
-                                            <Binding Path="Sign" />
-                                        </MultiBinding>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Rectangle.Style>
-                    </Rectangle>
-                    <TextBlock Text="{Binding Name}" Visibility="{Binding Name, Converter={StaticResource ConverterStringToVisibility}}" />
-                </Grid>
-            </DataTemplate>
-        </ItemsControl.Resources>
-    </ItemsControl>
+    <Grid Height="auto" Width="400" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid Visibility="{Binding Path=IsPlayerCollectionvisible, Converter={StaticResource ConverterBoolToVisibility}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Right">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="LightGray" Offset="0.5" />
+                        <GradientStop Color="Coral" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Column="0" Text="Last  " HorizontalAlignment="Right" />
+            <Rectangle Grid.Column="2" Width="20" Height="20" HorizontalAlignment="Left" >
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="0,1">
+                        <GradientStop Color="LightGray" Offset="0.5" />
+                        <GradientStop Color="#92A8D1" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Column="2" Text="  Next" HorizontalAlignment="Left"/>
+            <Rectangle Grid.Column="1" Fill="Black"/>
+        </Grid>
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding PlayerMovesCollection}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas
+                        Height="20"
+                        />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                                <Binding Path="VideoOffset" />
+                                <Binding Path="DataContext.ControlHalfWay" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                                <MultiBinding.ConverterParameter>
+                                    <sys:Boolean>False</sys:Boolean>
+                                </MultiBinding.ConverterParameter>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Canvas.Top" Value="0" />
+                    <!--<Setter.Value>
+                            <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                                <Binding Path="Y" />
+                                <Binding Path="DataContext.CanvasAvailableControlOffsetY" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>-->
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type models:PlaybackTileItem}">
+                    <Grid>
+                        <Grid.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
+                        </Grid.InputBindings>
+                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Stroke" Value="Black" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Selected}" Value="True">
+                                            <Setter Property="Stroke" Value="Yellow" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
+                        <Rectangle Width="{Binding ImgWidth}" Height="{Binding ImgWidth}">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ConverterSignToImage}">
+                                                <Binding Path="Sign" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
+                        <TextBlock Text="{Binding Name}" Visibility="{Binding Name, Converter={StaticResource ConverterStringToVisibility}}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.Resources>
+        </ItemsControl>
+    </Grid>
 </UserControl>

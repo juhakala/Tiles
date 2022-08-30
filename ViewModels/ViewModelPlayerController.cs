@@ -13,6 +13,10 @@ namespace WpfTiles.ViewModels
     {
         private int _Offset;
         public ObservableCollection<PlaybackTileItem> PlayerMovesCollection { get; set; }
+        public bool IsPlayerCollectionvisible
+        {
+            get { return PlayerMovesCollection?.Count > 0; }
+        }
         public int ControlHalfWay { get; set; }
         public ViewModelPlayerController(ModelGameController cont)
         {
@@ -20,6 +24,7 @@ namespace WpfTiles.ViewModels
             PlayerMovesCollection = new ObservableCollection<PlaybackTileItem>();
             cont.PlayerController.PlayerMovesCollectionChanged += UpdatePlayerMovesCollection;
             cont.PlayerController.PlayerMoveMadeEventHandler += PlayerMoveMade;
+            NotifyPropertyChanged(nameof(IsPlayerCollectionvisible));
         }
         private void UpdatePlayerMovesCollection(object sender, PlayerMovesCollectionChangedEventArgs e)
         {
@@ -80,6 +85,7 @@ namespace WpfTiles.ViewModels
             {
                 throw new NotImplementedException($"ViewModelPlayerController.UpdatePlayerMovesCollection:'{e.ChangeType}'");
             }
+            NotifyPropertyChanged(nameof(IsPlayerCollectionvisible));
         }
         private void PlayerMoveMade(object sender, PlayerMovesCollectionChangedEventArgs e)
         {

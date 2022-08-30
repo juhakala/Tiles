@@ -31,4 +31,9 @@ namespace WpfTiles.Common
         public int Index { get; set; }
         public int Id { get; set; }
     }
+
+    public class ControlTileIdEventArgs : EventArgs
+    {
+        public int Id { get; set; }
+    }
 }

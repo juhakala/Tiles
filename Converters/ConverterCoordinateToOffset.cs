@@ -19,7 +19,6 @@ namespace WpfTiles.Converters
                 {
                     var tmp = (int)(values[1]) + (double)((int)(values[0]) * (int)ENUM_TileSizes.MapBackground);
                     return (int)(values[1]) + (double)((int)(values[0]) * (int)ENUM_TileSizes.MapBackground); //to negative
-
                 }
                 else
                     return (double)((uint)(values[0]) * (int)ENUM_TileSizes.MapBackground + (int)(values[1])); //to positive

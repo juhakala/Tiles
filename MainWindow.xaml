@@ -9,7 +9,7 @@
         xmlns:converters="clr-namespace:WpfTiles.Converters"
         xmlns:views="clr-namespace:WpfTiles.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="739" Width="766">
+        Title="MainWindow" Height="759" Width="766">
     <Window.Resources>
         <converters:ConverterCoordinateToOffset x:Key="ConverterCoordinateToOffset" />
         <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
@@ -56,6 +56,8 @@
                 Grid.Column="2"
                 BorderBrush="Black"
                 BorderThickness="1"
+                Height="50"
+                VerticalAlignment="Center"
                 Background="LightGray"
                 >
                 <views:ViewLevelSelectorController DataContext="{Binding LevelSelectorControllerWM}" />
@@ -120,7 +122,10 @@
             Grid.Row="5"
             BorderBrush="Black"
             BorderThickness="1"
-            Height="50"
+            Height="70"
+            Width="{Binding CanvasMapAreaWidth}" d:Width="400"
+            VerticalAlignment="Center"
+            Background="LightGray"
             >
             <views:ViewPlayerController DataContext="{Binding PlayerControllerWM}" />
         </Border>
@@ -129,7 +134,7 @@
             Grid.Row="5"
             BorderBrush="Black"
             BorderThickness="1"
-            Height="50"
+            Height="70"
             Background="LightGray"
             >
             <views:ViewStepsController DataContext="{Binding StepsControllerVM}" />

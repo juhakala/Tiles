@@ -119,8 +119,11 @@ namespace WpfTiles.Model
         {
             if (_Src == null)
                 InitMoveSet();
-            var task = new Task(async () => await PlayerMoveSetAdvanceOneTask());
-            task.Start();
+            else
+            {
+                var task = new Task(async () => await PlayerMoveSetAdvanceOneTask());
+                task.Start();
+            }
         }
 
         private async Task PlayerMoveSetAdvanceOneTask()
