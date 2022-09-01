@@ -81,6 +81,7 @@ namespace WpfTiles.Model
             var rDict = new Dictionary<uint, List<ControlTileItem>>();
             foreach (var item in ControlTiles)
             {
+                item.Selected = false;
                 var key = item.Y / 2 + 1;
                 if (rDict.ContainsKey(key))
                 {
