@@ -40,6 +40,7 @@
 			<X>3</X>
 			<Y>2</Y>
 			<Color>gray</Color>
+			<Star>true</Star>
 		</MapTile>
 	</MapTiles>
 	<PlayerTiles>

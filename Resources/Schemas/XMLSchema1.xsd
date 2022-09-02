@@ -21,6 +21,7 @@
 			<xs:element name="X" type="xs:unsignedInt" />
 			<xs:element name="Y" type="xs:unsignedInt" />
 			<xs:element name="Color" type="TileColorType" />
+			<xs:element name="Star" type="xs:boolean" default="false" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 	

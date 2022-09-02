@@ -14,59 +14,87 @@
         <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
         <converters:ConverterStringToVisibility x:Key="ConverterStringToVisibility" />
         <converters:ConverterDirectionToAngle x:Key="ConverterDirectionToAngle" />
+        <converters:ConverterBoolToVisibility x:Key="ConverterBoolToVisibility" />
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding CanvasMapItems}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas
-                    Background="LightGray"
-                    />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemContainerStyle>
-            <Style TargetType="ContentPresenter">
-                <Setter Property="Canvas.Left">
-                    <Setter.Value>
-                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
-                            <Binding Path="X" />
-                            <Binding Path="DataContext.CanvasMapOffsetX" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
-                        </MultiBinding>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Canvas.Top">
-                    <Setter.Value>
-                        <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
-                            <Binding Path="Y" />
-                            <Binding Path="DataContext.CanvasMapOffsetY" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
-                        </MultiBinding>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-        <ItemsControl.Resources>
-            <DataTemplate DataType="{x:Type models:TileItem}">
-                <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}" Focusable="True">
-                    <Rectangle.Stroke>
-                        <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
-                    </Rectangle.Stroke>
-                </Rectangle>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type models:PlayerTileItem}">
-                <Grid>
-                    <Ellipse
-                            Name="MyPlayerEllipse"
-                            Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Color}">
-                        <Ellipse.Stroke>
-                            <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
-                        </Ellipse.Stroke>
-                    </Ellipse>
-                    <Polygon Points="3,1 10,5, 3,9" Stroke="Black" Fill="Black"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Polygon.LayoutTransform>
-                            <RotateTransform Angle="{Binding Path=Direction, Converter={StaticResource ConverterDirectionToAngle}, UpdateSourceTrigger=PropertyChanged}" />
-                        </Polygon.LayoutTransform>
-                    </Polygon>
-                </Grid>
-            </DataTemplate>
-        </ItemsControl.Resources>
-    </ItemsControl>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ItemsControl Grid.ColumnSpan="2" Grid.RowSpan="2" ItemsSource="{Binding CanvasMapItems}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas
+                        Background="LightGray"
+                        >
+                    </Canvas>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                                <Binding Path="X" />
+                                <Binding Path="DataContext.CanvasMapOffsetX" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Canvas.Top">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ConverterCoordinateToOffset}">
+                                <Binding Path="Y" />
+                                <Binding Path="DataContext.CanvasMapOffsetY" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type models:TileItem}">
+                    <Grid>
+                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}" Focusable="True">
+                            <Rectangle.Stroke>
+                                <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
+                            </Rectangle.Stroke>
+                        </Rectangle>
+                        <Ellipse 
+                            Visibility="{Binding Path=Star, Converter={StaticResource ConverterBoolToVisibility}}"
+                            Margin="4"
+                            Fill="Yellow"
+                            Stroke="Black"
+                            />
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type models:PlayerTileItem}">
+                    <Grid>
+                        <Ellipse
+                                Name="MyPlayerEllipse"
+                                Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Color}">
+                            <Ellipse.Stroke>
+                                <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
+                            </Ellipse.Stroke>
+                        </Ellipse>
+                        <Polygon Points="3,1 10,5, 3,9" Stroke="Black" Fill="Black"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Polygon.LayoutTransform>
+                                <RotateTransform Angle="{Binding Path=Direction, Converter={StaticResource ConverterDirectionToAngle}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Polygon.LayoutTransform>
+                        </Polygon>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.Resources>
+        </ItemsControl>
+        <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" DataContext="{Binding ScoreBoard}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Score}" />
+                <TextBlock Text=" / " />
+                <TextBlock Text="{Binding MaxScore}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+
 </UserControl>

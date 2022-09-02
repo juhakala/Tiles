@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using WpfTiles.Common;
 using WpfTiles.Model;
 
@@ -15,9 +16,10 @@ namespace WpfTiles.ViewModels
     {
         public int CanvasMapAreaWidth { get; set; }
         public int CanvasMapAreaHeight { get; set; }
-        public int CanvasMapOffsetX { get; set; }
-        public int CanvasMapOffsetY { get; set; }
-        public ObservableCollection<TileItem> CanvasMapItems { get; set; }
+        public int CanvasMapOffsetX { get; set; } //move to own viewmodelCanvasMap later ??
+        public int CanvasMapOffsetY { get; set; } //move to own viewmodelCanvasMap later ??
+        public ObservableCollection<TileItem> CanvasMapItems { get; set; } //move to own viewmodelCanvasMap later !!
+        public ModelScoreBoard ScoreBoard {get;set; } //move to own viewmodelCanvasMap later !!
 
         public int CanvasControlAreaWidth { get; set; }
         public int CanvasControlAreaHeight { get; set; }
@@ -29,7 +31,6 @@ namespace WpfTiles.ViewModels
         public ViewModelPlayerController PlayerControllerWM { get; set; }
         public ViewModelLevelSelectorController LevelSelectorControllerWM { get; set; }
         public ViewModelStepsController StepsControllerVM { get; set; }
-
 
         public ICommand SetSelectedCommand => new RelayCommand(o => SetSelectedMethod());
 
@@ -74,12 +75,15 @@ namespace WpfTiles.ViewModels
             NotifyPropertyChanged(nameof(PlayerControllerWM));
             NotifyPropertyChanged(nameof(LevelSelectorControllerWM));
             NotifyPropertyChanged(nameof(StepsControllerVM));
+
+            NotifyPropertyChanged(nameof(ScoreBoard));
         }
         private void LoadMapFromCont(ModelGameController cont)
         {
             CanvasMapOffsetX = cont.Map.OffsetX;
             CanvasMapOffsetY = cont.Map.OffsetY;
             CanvasMapItems = PopulateCanvasMapItems(cont.MapTiles, cont.PlayerTile);
+            ScoreBoard = cont.ScoreBoard;
 
             CanvasControlOffsetX = cont.Control.OffsetX;
             CanvasControlOffsetY = cont.Control.OffsetY;

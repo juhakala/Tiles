@@ -64,7 +64,6 @@ namespace WpfTiles.ViewModels
                             item.VideoOffset--;
                     }
                     PlayerMovesCollection.Remove(tmpItem); //from middle, should be fcall first name tile replacement
-
                 }
                 else
                 {

@@ -18,6 +18,7 @@ namespace WpfTiles.Model
         public ModelControl AvailableControlT { get; set; }
         public ModelPlayerController PlayerController { get; set; }
         public ModelLevelSelectorController LevelSelectorController { get; set; }
+        public ModelScoreBoard ScoreBoard { get; set; }
 
         public List<TileItem> MapTiles { get; set; }
         public PlayerTileItem PlayerTile { get; set; }
@@ -91,6 +92,10 @@ namespace WpfTiles.Model
             ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);
 
             PlayerController = new ModelPlayerController(PlayerTile, ControlTiles);
+
+            ScoreBoard = new ModelScoreBoard(MapTiles.FindAll(o => o.Star == true).Count);
+        
+            PlayerController.Player.StarPicketEventHandler += ScoreBoard.IncreaseScore;
         }
 
         public ModelGameController(string FilePath)

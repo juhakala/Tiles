@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using WpfTiles.Common;
 using WpfTiles.Model.Parser;
 
 namespace WpfTiles.Model
@@ -52,6 +53,26 @@ namespace WpfTiles.Model
             }));
         }
 
+        public EventHandler<PlayerPicketStarEventArgs> StarPicketEventHandler;
+        
+        private void StarPicketEventStarter()
+        {
+            EventHandler<PlayerPicketStarEventArgs> handler = StarPicketEventHandler;
+            handler?.Invoke(this, new PlayerPicketStarEventArgs());
+        }
+
+        private void CheckForStar()
+        {
+            var currentMapTile = MapTiles.FirstOrDefault(o => o.Y == Y && o.X == X);
+            if (currentMapTile == null)
+                throw new NotImplementedException($"MoveForward->cant be null, currentMapTile:{currentMapTile}");
+            if (currentMapTile.Star)
+            {
+                currentMapTile.Star = false;
+                StarPicketEventStarter();
+            }
+        }
+
         public void RotateRight()
         {
             System.Windows.Application.Current.Dispatcher.Invoke((Action)(() =>
@@ -74,6 +95,7 @@ namespace WpfTiles.Model
                     if (MoveValidator.ValidateForwardMove(this, item, MapTiles))
                     {
                         MoveForward();
+                        CheckForStar();
                         return true;
                     }
                     break;

@@ -36,4 +36,8 @@ namespace WpfTiles.Common
     {
         public int Id { get; set; }
     }
+    public class PlayerPicketStarEventArgs : EventArgs
+    {
+
+    }
 }

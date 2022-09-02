@@ -15,6 +15,7 @@ namespace WpfTiles.Model
         private double _Height;
         private SolidColorBrush _Color = new SolidColorBrush(System.Windows.Media.Colors.Gray);
         private int _ColorValue = 8421504;
+        private bool _Star;
 
 
         public uint X
@@ -93,5 +94,19 @@ namespace WpfTiles.Model
                 }
             }
         }
+
+        public bool Star
+        {
+            get { return _Star; }
+            set
+            {
+                if (_Star != value)
+                {
+                    _Star = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
     }
 }

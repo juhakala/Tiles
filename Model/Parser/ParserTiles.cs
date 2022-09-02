@@ -103,7 +103,7 @@ namespace WpfTiles.Model.Parser
             var res = new List<TileItem>();
             foreach (var item in tiles)
             {
-                res.Add(new TileItem() { X=item.X, Y=item.Y, Width=size, Height=size, Color=CorrectColor(item.Color) });
+                res.Add(new TileItem() { X=item.X, Y=item.Y, Width=size, Height=size, Color=CorrectColor(item.Color), Star=item.Star });
             }
             if (res.GroupBy(p => new { p.X, p.Y }).Count() != res.Count())
             {
