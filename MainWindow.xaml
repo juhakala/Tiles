@@ -9,13 +9,17 @@
         xmlns:converters="clr-namespace:WpfTiles.Converters"
         xmlns:views="clr-namespace:WpfTiles.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="759" Width="766">
+        Title="MainWindow" Height="759" Width="766"
+        Icon="/Resources/Images/taskbar_icon_tiles.png">
     <Window.Resources>
         <converters:ConverterCoordinateToOffset x:Key="ConverterCoordinateToOffset" />
         <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
         <converters:ConverterStringToVisibility x:Key="ConverterStringToVisibility" />
         <converters:ConverterDirectionToAngle x:Key="ConverterDirectionToAngle" />
     </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="{Binding TaskBar.ProgressState}"  ProgressValue="{Binding TaskBar.ProgressValue}" />
+    </Window.TaskbarItemInfo>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50" />

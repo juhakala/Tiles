@@ -24,7 +24,7 @@ namespace WpfTiles.ViewModels
             handler?.Invoke(this, new EventArgs());
         }
 
-        public ICommand StartPlayerAnimCommand => new RelayCommand(o => StartPlayerAnimMethod());
+        public ICommand StartPlayerAnimCommand => new RelayCommand(o => StartPlayerAnimMethod()); //disable, if ModelPlayerController._PlayerStatus == running?
         public event EventHandler StartPlayerAnimEvent;
         private void StartPlayerAnimMethod()
         {

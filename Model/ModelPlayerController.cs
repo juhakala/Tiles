@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Shell;
 using WpfTiles.Common;
 
 namespace WpfTiles.Model
@@ -17,7 +18,17 @@ namespace WpfTiles.Model
         NORMAL_FORWARD,
         HISTORY_FORWARD,
         HISTORY_BACKWARD,
+        RESET,
     }
+    public enum ENUM_PlayerGameStatus
+    {
+        NONE,
+        STARTED,
+        RUNNING,
+        PAUSED, // use with in "one step at the time" too
+        END,
+    }
+
     class ModelPlayerController
     {
         private CancellationToken _Ct;
@@ -25,11 +36,41 @@ namespace WpfTiles.Model
         private int _PlayerMovesIndex;
         private Dictionary<uint, List<ControlTileItem>> _MoveSetDict;
         private int _HistoryOffsetIndex;
+        private ENUM_PlayerGameStatus _PlayerStatus;
+
+        //backup for resetting when needed
+        private List<TileItem> _BackUpMapTiles;
+        private PlayerTileItem _BackUpPlayer;
+        //cont items in ControlTiles
 
         public PlayerTileItem Player { get; set; }
         public List<ControlTileItem> ControlTiles { get; set; }
         public List<ControlTileItem> PlayerMoves { get; set; }
         public List<ControlTileItem> PlayerMoveHistoryTiles { get; set; } = new List<ControlTileItem>();
+        public ModelScoreBoard ScoreBoard { get; set; }
+
+        public event EventHandler<ProgressUpdatedEventArgs> ProgressUpdated;
+
+        private void UpdateGameProgress(double value, TaskbarItemProgressState state)
+        {
+            if (state == TaskbarItemProgressState.Paused)
+            {
+                _PlayerStatus = ENUM_PlayerGameStatus.PAUSED;
+            }
+            else if (state == TaskbarItemProgressState.Indeterminate)
+            {
+                _PlayerStatus = ENUM_PlayerGameStatus.RUNNING;
+            }
+            else if (state == TaskbarItemProgressState.None || state == TaskbarItemProgressState.Error)
+            {
+                _PlayerStatus = ENUM_PlayerGameStatus.END;
+            }
+            EventHandler<ProgressUpdatedEventArgs> handler = ProgressUpdated;
+            handler?.Invoke(this, new ProgressUpdatedEventArgs() {
+                Value = value,
+                State = state,
+            });
+        }
 
         public event EventHandler<PlayerMovesCollectionChangedEventArgs> PlayerMovesCollectionChanged;
         public event EventHandler<PlayerMovesCollectionChangedEventArgs> PlayerMoveMadeEventHandler;
@@ -66,14 +107,23 @@ namespace WpfTiles.Model
         private void PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType type, ControlTileItem item, int index)
         {
             EventHandler<PlayerMovesCollectionChangedEventArgs> handler = PlayerMoveMadeEventHandler;
-            var args = new PlayerMovesCollectionChangedEventArgs()
+            if (type == ENUM_PlayerMovesCollectionChangedType.RESET)
             {
-                ChangeType = type,
-                Item = PlayerMoves[_PlayerMovesIndex],
-                Index = index,
-                Id = item.Id,
-            };
-            handler?.Invoke(this, args);
+                handler?.Invoke(this, new PlayerMovesCollectionChangedEventArgs()
+                {
+                    ChangeType = type,
+                });
+            }
+            else
+            {
+                handler?.Invoke(this, new PlayerMovesCollectionChangedEventArgs()
+                {
+                    ChangeType = type,
+                    Item = PlayerMoves[_PlayerMovesIndex],
+                    Index = index,
+                    Id = item.Id,
+                });
+            }
         }
 
         private Dictionary<uint, List<ControlTileItem>> InitMoveSetDict()
@@ -118,10 +168,18 @@ namespace WpfTiles.Model
 
         public void PlayerMoveStepForwardOne(object sender, EventArgs e)
         {
-            if (_Src == null)
+            if (_PlayerStatus == ENUM_PlayerGameStatus.NONE)
+            {
                 InitMoveSet();
+            }
+            else if (_PlayerStatus == ENUM_PlayerGameStatus.END)
+            {
+                ResetCurrentMapInstance();
+                //throw new NotImplementedException($"ModelPlayerController.PlayerMoveStepForwardOne => _PlayerStatus:{_PlayerStatus}");
+            }
             else
             {
+                //_Src.Cancel(); //for if already running? or prevent it totally
                 var task = new Task(async () => await PlayerMoveSetAdvanceOneTask());
                 task.Start();
             }
@@ -137,13 +195,26 @@ namespace WpfTiles.Model
                     {
                         PlayerMoveSetAdvanceOne();
                         _PlayerMovesIndex++;
+                        UpdateGameProgress(0.5, TaskbarItemProgressState.Paused);
                     }
-                    else
+                    if (_PlayerMovesIndex >= PlayerMoves.Count)// check if no more moves at bank
                     {
-                        //no more moves left in bank
-                        // show error that not passed?
-                        throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                        if (ScoreBoard.CheckIfPickedAll())//player won
+                        {
+                            UpdateGameProgress(0.5, TaskbarItemProgressState.None);
+                        }
+                        else if (true) //player lost
+                        {
+                            //show error, and reset/get ready to reset
+                            UpdateGameProgress(0.5, TaskbarItemProgressState.Error);
+                            throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                        }
+                        else 
+                        {
+                            throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                        }
                     }
+                    
                 }
                 else //make history move
                 {
@@ -193,7 +264,8 @@ namespace WpfTiles.Model
         {
             try
             {
-                for (_PlayerMovesIndex = 0; _PlayerMovesIndex < PlayerMoves.Count(); _PlayerMovesIndex++)
+                UpdateGameProgress(0, TaskbarItemProgressState.Indeterminate);
+                for (; _PlayerMovesIndex < PlayerMoves.Count(); _PlayerMovesIndex++)
                 {
                     _Ct.ThrowIfCancellationRequested();
                     await Task.Run(() =>
@@ -204,20 +276,25 @@ namespace WpfTiles.Model
 
                     await Task.Delay(2000, _Ct);
                 }
+                UpdateGameProgress(0, TaskbarItemProgressState.None);
             }
             catch (TaskCanceledException)
             {
+                UpdateGameProgress(0.5, TaskbarItemProgressState.Paused);
                 return;
             }
         }
 
         public void InitMoveSet()
         {
+            _PlayerStatus = ENUM_PlayerGameStatus.STARTED;
+            PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.RESET, new ControlTileItem(), 0);
             if (_Src != null)
             {
-                //cancel atm running player and reset player and arena
+                //cancel atm running/at end player and reset player and arena
                 _Src.Cancel();
             }
+            _PlayerMovesIndex = 0;
             PlayerMoveHistoryTiles = new List<ControlTileItem>();
             _MoveSetDict = InitMoveSetDict();
             PlayerMoves = new List<ControlTileItem>();
@@ -228,17 +305,68 @@ namespace WpfTiles.Model
 
         public void StartMoveSet()
         {
-            InitMoveSet();
-            var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
-            //PlayerMovementTask.ContinueWith(); //check result
-            PlayerMovementTask.Start();
+            if (_PlayerStatus == ENUM_PlayerGameStatus.NONE) // if playermoving not yet started
+            {
+                InitMoveSet();
+                var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
+                //PlayerMovementTask.ContinueWith(); //check result
+                PlayerMovementTask.Start();
+            }
+            else if (_PlayerStatus == ENUM_PlayerGameStatus.END) // if playermoving is at the end
+            {
+                //we'll go again since victoryscreen or error message shown?
+                ResetCurrentMapInstance();
+                //throw new NotImplementedException($"ModelPlayerController.StartMoveSet => _PlayerStatus:{_PlayerStatus}");
+            }
+            else if (_PlayerStatus == ENUM_PlayerGameStatus.RUNNING) // no need to do anything if already running? maybe disable button to do this
+            {
+                //throw new NotImplementedException($"ModelPlayerController.StartMoveSet => _PlayerStatus:{_PlayerStatus}");
+            }
+            else if (_PlayerStatus == ENUM_PlayerGameStatus.STARTED || _PlayerStatus == ENUM_PlayerGameStatus.PAUSED)// if playermoving ongoing
+            {
+                var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
+                //PlayerMovementTask.ContinueWith(); //check result
+                PlayerMovementTask.Start();
+            }
+            else
+            {
+                throw new NotImplementedException($"ModelPlayerController.StartMoveSet => _PlayerStatus:{_PlayerStatus}");
+            }
         }
 
-        public ModelPlayerController(PlayerTileItem player, List<ControlTileItem> contItems)
+        private void ResetCurrentMapInstance()
         {
+            foreach (var item in Player.MapTiles)
+            {
+                var foundItems = _BackUpMapTiles.FindAll(o => o.X == item.X && o.Y == item.Y);
+                if (foundItems.Count != 1)
+                    throw new NotImplementedException($"ModelPlayerController.ResetCurrentMapInstance => foundItems.count:{foundItems.Count}");
+                item.Color = foundItems.First().Color;
+                item.Star = foundItems.First().Star;
+            }
+            Player.X = _BackUpPlayer.X;
+            Player.Y = _BackUpPlayer.Y;
+            Player.Direction = _BackUpPlayer.Direction;
+            ScoreBoard.ResetScoreBoard();
+            PlayerMoves = new List<ControlTileItem>();
+            _PlayerStatus = ENUM_PlayerGameStatus.NONE;
+        }
+
+        public ModelPlayerController(PlayerTileItem player, List<ControlTileItem> contItems, List<TileItem> mapTiles)
+        {
+            //save/clone values to bank * for resetting just this stage and progress => player, maptiles, 
+            _BackUpPlayer = new PlayerTileItem() { X=player.X, Y=player.Y, Direction=player.Direction };
+            _BackUpMapTiles = new List<TileItem>();
+            foreach (var item in mapTiles)
+            {
+                _BackUpMapTiles.Add(new TileItem() { X=item.X, Y=item.Y, Width=item.Width, Height=item.Height, Color=item.Color, Star=item.Star });
+            }
+
             Player = player;
             ControlTiles = contItems;
             PlayerMoves = new List<ControlTileItem>();
+            ScoreBoard = new ModelScoreBoard(mapTiles.FindAll(o => o.Star == true).Count);
+            Player.StarPicketEventHandler += ScoreBoard.IncreaseScore;
         }
     }
 }

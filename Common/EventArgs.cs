@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shell;
 using WpfTiles.Model;
 
 namespace WpfTiles.Common
@@ -39,5 +40,10 @@ namespace WpfTiles.Common
     public class PlayerPicketStarEventArgs : EventArgs
     {
 
+    }
+    public class ProgressUpdatedEventArgs : EventArgs
+    {
+        public double Value { get; set; }
+        public TaskbarItemProgressState State { get; set; }
     }
 }

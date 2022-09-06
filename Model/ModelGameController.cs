@@ -18,7 +18,6 @@ namespace WpfTiles.Model
         public ModelControl AvailableControlT { get; set; }
         public ModelPlayerController PlayerController { get; set; }
         public ModelLevelSelectorController LevelSelectorController { get; set; }
-        public ModelScoreBoard ScoreBoard { get; set; }
 
         public List<TileItem> MapTiles { get; set; }
         public PlayerTileItem PlayerTile { get; set; }
@@ -48,7 +47,7 @@ namespace WpfTiles.Model
             MapTiles = new List<TileItem>();
             ControlTiles = new List<ControlTileItem>();
             PlayerTile = new PlayerTileItem();
-            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles);
+            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles);
         }
 
         public void InitFileMap(string filepath)
@@ -91,11 +90,7 @@ namespace WpfTiles.Model
             ParserMap.ParseOffsetXY(AvailableControlT);
             ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);
 
-            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles);
-
-            ScoreBoard = new ModelScoreBoard(MapTiles.FindAll(o => o.Star == true).Count);
-        
-            PlayerController.Player.StarPicketEventHandler += ScoreBoard.IncreaseScore;
+            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles);
         }
 
         public ModelGameController(string FilePath)

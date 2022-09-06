@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -31,6 +32,7 @@ namespace WpfTiles.ViewModels
         public ViewModelPlayerController PlayerControllerWM { get; set; }
         public ViewModelLevelSelectorController LevelSelectorControllerWM { get; set; }
         public ViewModelStepsController StepsControllerVM { get; set; }
+        public TaskBarController TaskBar { get; set; }
 
         public ICommand SetSelectedCommand => new RelayCommand(o => SetSelectedMethod());
 
@@ -83,7 +85,7 @@ namespace WpfTiles.ViewModels
             CanvasMapOffsetX = cont.Map.OffsetX;
             CanvasMapOffsetY = cont.Map.OffsetY;
             CanvasMapItems = PopulateCanvasMapItems(cont.MapTiles, cont.PlayerTile);
-            ScoreBoard = cont.ScoreBoard;
+            ScoreBoard = cont.PlayerController.ScoreBoard;
 
             CanvasControlOffsetX = cont.Control.OffsetX;
             CanvasControlOffsetY = cont.Control.OffsetY;
@@ -93,6 +95,8 @@ namespace WpfTiles.ViewModels
             PlayerControllerWM = new ViewModelPlayerController(cont);
             LevelSelectorControllerWM = new ViewModelLevelSelectorController(cont);
             StepsControllerVM = new ViewModelStepsController(cont);
+
+            TaskBar = new TaskBarController(cont);
         }
 
         public ViewModelMainWindow(ModelGameController cont)

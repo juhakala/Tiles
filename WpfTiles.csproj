@@ -16,6 +16,7 @@
     <None Remove="Resources\Images\RightArrow.png" />
     <None Remove="Resources\Images\RotateLeft.png" />
     <None Remove="Resources\Images\RotateRight.png" />
+    <None Remove="Resources\Images\taskbar_icon_tiles.png" />
     <None Remove="Resources\Images\TransparentImage.png" />
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +30,7 @@
     </Resource>
     <Resource Include="Resources\Images\RotateLeft.png" />
     <Resource Include="Resources\Images\RotateRight.png" />
+    <Resource Include="Resources\Images\taskbar_icon_tiles.png" />
     <Resource Include="Resources\Images\TransparentImage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

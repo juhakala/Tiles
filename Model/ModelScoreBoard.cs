@@ -49,5 +49,13 @@ namespace WpfTiles.Model
         {
             MaxScore = max;
         }
+        public bool CheckIfPickedAll()
+        {
+            return Score == MaxScore;
+        }
+        public void ResetScoreBoard()
+        {
+            Score = 0;
+        }
     }
 }

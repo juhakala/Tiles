@@ -80,6 +80,12 @@ namespace WpfTiles.ViewModels
             {
                 throw new NotImplementedException($"ViewModelPlayerController.UpdatePlayerMovesCollection:'{e.ChangeType}'");
             }
+            else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.RESET)
+            {
+                _Offset = 0;
+                PlayerMovesCollection.Clear();
+                NotifyPropertyChanged(nameof(IsPlayerCollectionvisible));
+            }
             else
             {
                 throw new NotImplementedException($"ViewModelPlayerController.UpdatePlayerMovesCollection:'{e.ChangeType}'");
@@ -88,7 +94,7 @@ namespace WpfTiles.ViewModels
         }
         private void PlayerMoveMade(object sender, PlayerMovesCollectionChangedEventArgs e)
         {
-            if (ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD == e.ChangeType) // && ENUM_PlayerMovesCollectionChangedType.HISTORY_FORWARD == e.ChangeType
+            if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD) // && ENUM_PlayerMovesCollectionChangedType.HISTORY_FORWARD == e.ChangeType
             {
                 _Offset++;
                 foreach (var item in PlayerMovesCollection)
@@ -96,7 +102,13 @@ namespace WpfTiles.ViewModels
                     item.VideoOffset -= 1;
                 }
             }
-            
+            else if (e.ChangeType == ENUM_PlayerMovesCollectionChangedType.RESET)
+            {
+                _Offset = 0;
+                PlayerMovesCollection.Clear();
+                NotifyPropertyChanged(nameof(IsPlayerCollectionvisible));
+            }
+
         }
     }
 }
