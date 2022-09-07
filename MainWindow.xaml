@@ -16,6 +16,7 @@
         <converters:ConverterSignToImage x:Key="ConverterSignToImage" />
         <converters:ConverterStringToVisibility x:Key="ConverterStringToVisibility" />
         <converters:ConverterDirectionToAngle x:Key="ConverterDirectionToAngle" />
+        <converters:ConverterBoolToVisibility x:Key="ConverterBoolToVisibility" />
     </Window.Resources>
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="{Binding TaskBar.ProgressState}"  ProgressValue="{Binding TaskBar.ProgressValue}" />
@@ -143,5 +144,14 @@
             >
             <views:ViewStepsController DataContext="{Binding StepsControllerVM}" />
         </Border>
+        <Grid 
+            Grid.ColumnSpan="5" 
+            Grid.RowSpan="7"
+            Background="black"
+            Opacity="0.4"
+            Visibility="{Binding Path=IsNotifications, Converter={StaticResource ConverterBoolToVisibility}}"
+            >
+
+        </Grid>
     </Grid>
 </Window>

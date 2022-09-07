@@ -68,7 +68,7 @@
                 BorderBrush="Black" 
                 BorderThickness="1" 
                 Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
-                Content=">>"
+                Content=">I"
                 Command="{Binding InstantPlayerAnimCommand}"
                 />
         </StackPanel>

@@ -93,7 +93,7 @@ namespace WpfTiles.Model
             PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles);
         }
 
-        public ModelGameController(string FilePath)
+        public ModelGameController()
         {
             LevelSelectorController = new ModelLevelSelectorController();
             var filepath = LevelSelectorController.Levels.FirstOrDefault()?.Levels.FirstOrDefault()?.FilePath;

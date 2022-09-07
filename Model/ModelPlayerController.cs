@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Shell;
 using WpfTiles.Common;
+using WpfTiles.Model.Notification;
 
 namespace WpfTiles.Model
 {
@@ -61,7 +62,11 @@ namespace WpfTiles.Model
             {
                 _PlayerStatus = ENUM_PlayerGameStatus.RUNNING;
             }
-            else if (state == TaskbarItemProgressState.None || state == TaskbarItemProgressState.Error)
+            else if (state == TaskbarItemProgressState.None && value == 0.0)
+            {
+                //_PlayerStatus = ENUM_PlayerGameStatus.NONE;
+            }
+            else if ((state == TaskbarItemProgressState.None && value == 1.0 ) || state == TaskbarItemProgressState.Error)
             {
                 _PlayerStatus = ENUM_PlayerGameStatus.END;
             }
@@ -126,6 +131,13 @@ namespace WpfTiles.Model
             }
         }
 
+        private void PlayerWonLevel()
+        {
+            var noti = new ModelNotification() { Title="Level Won Title", Text="Level Won Text"};
+            ModelNotificationManager.RaiseNotification(noti);
+        }
+
+
         private Dictionary<uint, List<ControlTileItem>> InitMoveSetDict()
         {
             var rDict = new Dictionary<uint, List<ControlTileItem>>();
@@ -175,6 +187,7 @@ namespace WpfTiles.Model
             else if (_PlayerStatus == ENUM_PlayerGameStatus.END)
             {
                 ResetCurrentMapInstance();
+                InitMoveSet();
                 //throw new NotImplementedException($"ModelPlayerController.PlayerMoveStepForwardOne => _PlayerStatus:{_PlayerStatus}");
             }
             else
@@ -201,7 +214,11 @@ namespace WpfTiles.Model
                     {
                         if (ScoreBoard.CheckIfPickedAll())//player won
                         {
-                            UpdateGameProgress(0.5, TaskbarItemProgressState.None);
+                            //should not happen since its checked earlier
+                            throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+
+                            //UpdateGameProgress(1.0, TaskbarItemProgressState.None);
+                            //PlayerWonLevel();
                         }
                         else if (true) //player lost
                         {
@@ -235,6 +252,11 @@ namespace WpfTiles.Model
                     PlayerMoveHistoryTiles.Add(PlayerMoves[_PlayerMovesIndex]);
                 }
                 PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, PlayerMoves[_PlayerMovesIndex], _PlayerMovesIndex);
+                if (ScoreBoard.CheckIfPickedAll())
+                {
+                    UpdateGameProgress(1.0, TaskbarItemProgressState.None);
+                    PlayerWonLevel();
+                }
             }
             else if (!string.IsNullOrEmpty(PlayerMoves[_PlayerMovesIndex].Name))
             {
@@ -316,6 +338,7 @@ namespace WpfTiles.Model
             {
                 //we'll go again since victoryscreen or error message shown?
                 ResetCurrentMapInstance();
+                InitMoveSet();
                 //throw new NotImplementedException($"ModelPlayerController.StartMoveSet => _PlayerStatus:{_PlayerStatus}");
             }
             else if (_PlayerStatus == ENUM_PlayerGameStatus.RUNNING) // no need to do anything if already running? maybe disable button to do this
@@ -349,7 +372,7 @@ namespace WpfTiles.Model
             Player.Direction = _BackUpPlayer.Direction;
             ScoreBoard.ResetScoreBoard();
             PlayerMoves = new List<ControlTileItem>();
-            _PlayerStatus = ENUM_PlayerGameStatus.NONE;
+            UpdateGameProgress(0, TaskbarItemProgressState.None);
         }
 
         public ModelPlayerController(PlayerTileItem player, List<ControlTileItem> contItems, List<TileItem> mapTiles)

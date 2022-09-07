@@ -20,14 +20,27 @@ namespace WpfTiles.Model
             FilePath = path;
         }
     }
-    class LevelInfo
+    class LevelInfo : NotifyPropertyChangedBase
     {
+        private bool _Passed;
+
         public uint Major { get; set; }
         public uint Minor { get; set; }
-        //public uint Microsoft {get; set;} in future?
         public string FilePath { get; set; }
         public int Width { get { return (int)ENUM_TileSizes.MapBackground; } }
         public int Height { get { return (int)ENUM_TileSizes.MapBackground; } }
+        public bool Passed
+        { 
+            get { return _Passed; }
+            set
+            {
+                if (_Passed != value)
+                {
+                    _Passed = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         
         public ICommand LevelInfoSelectedCommand => new RelayCommand(o => Selected());
         public event EventHandler<ChangeMapToEventArgs> ChangeMapToEventHandler;

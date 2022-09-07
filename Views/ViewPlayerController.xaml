@@ -26,23 +26,23 @@
                 <ColumnDefinition Width="1" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Right">
+            <!--<Rectangle Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Right">
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="LightGray" Offset="0.5" />
                         <GradientStop Color="Coral" Offset="1.0" />
                     </LinearGradientBrush>
                 </Rectangle.Fill>
-            </Rectangle>
+            </Rectangle>-->
             <TextBlock Grid.Column="0" Text="Last  " HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="2" Width="20" Height="20" HorizontalAlignment="Left" >
+            <!--<Rectangle Grid.Column="2" Width="20" Height="20" HorizontalAlignment="Left" >
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="1,0" EndPoint="0,1">
                         <GradientStop Color="LightGray" Offset="0.5" />
                         <GradientStop Color="#92A8D1" Offset="1.0" />
                     </LinearGradientBrush>
                 </Rectangle.Fill>
-            </Rectangle>
+            </Rectangle>-->
             <TextBlock Grid.Column="2" Text="  Next" HorizontalAlignment="Left"/>
             <Rectangle Grid.Column="1" Fill="Black"/>
         </Grid>

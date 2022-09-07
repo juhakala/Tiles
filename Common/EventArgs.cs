@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shell;
 using WpfTiles.Model;
+using WpfTiles.Model.Notification;
 
 namespace WpfTiles.Common
 {
@@ -45,5 +46,9 @@ namespace WpfTiles.Common
     {
         public double Value { get; set; }
         public TaskbarItemProgressState State { get; set; }
+    }
+    public class NotificationEventArgs : EventArgs
+    {
+        public ModelNotification Notification { get; set; }
     }
 }
