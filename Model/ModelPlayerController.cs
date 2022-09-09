@@ -192,54 +192,75 @@ namespace WpfTiles.Model
             }
             else
             {
-                //_Src.Cancel(); //for if already running? or prevent it totally
-                var task = new Task(async () => await PlayerMoveSetAdvanceOneTask());
-                task.Start();
+                try
+                {
+                    //_Src.Cancel(); //for if already running? or prevent it totally
+                    var task = new Task(async () => await PlayerMoveSetAdvanceOneTask(), _Ct);
+                    task.Start();
+                }
+                catch (TaskCanceledException)
+                {
+                    return;
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
             }
         }
 
         private async Task PlayerMoveSetAdvanceOneTask()
         {
-            await Task.Run(() =>
+            try
             {
-                if (_HistoryOffsetIndex == 0) // make normal move
+                _Ct.ThrowIfCancellationRequested();
+                await Task.Run(() =>
                 {
-                    if (_PlayerMovesIndex < PlayerMoves.Count)
+                    if (_HistoryOffsetIndex == 0) // make normal move
                     {
-                        PlayerMoveSetAdvanceOne();
-                        _PlayerMovesIndex++;
-                        UpdateGameProgress(0.5, TaskbarItemProgressState.Paused);
-                    }
-                    if (_PlayerMovesIndex >= PlayerMoves.Count)// check if no more moves at bank
-                    {
-                        if (ScoreBoard.CheckIfPickedAll())//player won
+                        if (_PlayerMovesIndex < PlayerMoves.Count)
                         {
-                            //should not happen since its checked earlier
-                            throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
-
-                            //UpdateGameProgress(1.0, TaskbarItemProgressState.None);
-                            //PlayerWonLevel();
+                            PlayerMoveSetAdvanceOne();
+                            _PlayerMovesIndex++;
+                            _Ct.ThrowIfCancellationRequested();
+                            UpdateGameProgress(0.5, TaskbarItemProgressState.Paused);
                         }
-                        else if (true) //player lost
+                        if (_PlayerMovesIndex >= PlayerMoves.Count)// check if no more moves at bank
                         {
-                            //show error, and reset/get ready to reset
-                            UpdateGameProgress(0.5, TaskbarItemProgressState.Error);
-                            throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                            if (ScoreBoard.CheckIfPickedAll())//player won
+                            {
+                                UpdateGameProgress(1.0, TaskbarItemProgressState.None); //might happen if no moves added and still won 
+                                PlayerWonLevel();
+                            }
+                            else if (true) //player lost
+                            {
+                                //show error, and reset/get ready to reset
+                                UpdateGameProgress(0.5, TaskbarItemProgressState.Error);
+                                throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                            }
+                            else 
+                            {
+                                throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                            }
                         }
-                        else 
-                        {
-                            throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
-                        }
-                    }
                     
-                }
-                else //make history move
-                {
-                    //and advance from history tiles (with last?)
-                    //think is need to add fcalls too to history tiles since coloring will be there?
-                    _HistoryOffsetIndex++;
-                }
-            });
+                    }
+                    else //make history move
+                    {
+                        //and advance from history tiles (with last?)
+                        //think is need to add fcalls too to history tiles since coloring will be there?
+                        _HistoryOffsetIndex++;
+                    }
+                }, _Ct);
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         private void PlayerMoveSetAdvanceOne()
@@ -252,11 +273,6 @@ namespace WpfTiles.Model
                     PlayerMoveHistoryTiles.Add(PlayerMoves[_PlayerMovesIndex]);
                 }
                 PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, PlayerMoves[_PlayerMovesIndex], _PlayerMovesIndex);
-                if (ScoreBoard.CheckIfPickedAll())
-                {
-                    UpdateGameProgress(1.0, TaskbarItemProgressState.None);
-                    PlayerWonLevel();
-                }
             }
             else if (!string.IsNullOrEmpty(PlayerMoves[_PlayerMovesIndex].Name))
             {
@@ -280,6 +296,12 @@ namespace WpfTiles.Model
                 // for empty tiles
                 PlayerMoveMadeEventMethod(ENUM_PlayerMovesCollectionChangedType.NORMAL_FORWARD, PlayerMoves[_PlayerMovesIndex], _PlayerMovesIndex);
             }
+            if (ScoreBoard.CheckIfPickedAll())//player won
+            {
+                _Src.Cancel();
+                UpdateGameProgress(1.0, TaskbarItemProgressState.None);
+                PlayerWonLevel();
+            }
         }
 
         private async Task PlayerMoveSetTask()
@@ -302,7 +324,7 @@ namespace WpfTiles.Model
             }
             catch (TaskCanceledException)
             {
-                UpdateGameProgress(0.5, TaskbarItemProgressState.Paused);
+                //UpdateGameProgress(0.5, TaskbarItemProgressState.Paused); //whi cancels => tells state
                 return;
             }
         }

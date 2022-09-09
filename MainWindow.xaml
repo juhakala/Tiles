@@ -144,14 +144,8 @@
             >
             <views:ViewStepsController DataContext="{Binding StepsControllerVM}" />
         </Border>
-        <Grid 
-            Grid.ColumnSpan="5" 
-            Grid.RowSpan="7"
-            Background="black"
-            Opacity="0.4"
-            Visibility="{Binding Path=IsNotifications, Converter={StaticResource ConverterBoolToVisibility}}"
-            >
+        <views:ViewNotificationControl DataContext="{Binding NotificationsControlVM}" Grid.ColumnSpan="5" Grid.RowSpan="7" />
 
-        </Grid>
+
     </Grid>
 </Window>

@@ -16,9 +16,6 @@ namespace WpfTiles.ViewModels
 {
     class ViewModelMainWindow : ViewModelBase
     {
-        public ObservableCollection<ModelNotification> NotificationCollection { get; set; } = new ObservableCollection<ModelNotification>();
-        public bool IsNotifications { get { return NotificationCollection.Count > 0; } }
-
         public int CanvasMapAreaWidth { get; set; }
         public int CanvasMapAreaHeight { get; set; }
         public int CanvasMapOffsetX { get; set; } //move to own viewmodelCanvasMap later ??
@@ -36,6 +33,7 @@ namespace WpfTiles.ViewModels
         public ViewModelPlayerController PlayerControllerWM { get; set; }
         public ViewModelLevelSelectorController LevelSelectorControllerWM { get; set; }
         public ViewModelStepsController StepsControllerVM { get; set; }
+        public ViewModelNotificationsControl NotificationsControlVM { get; set; }
         public TaskBarController TaskBar { get; set; }
 
         public ICommand SetSelectedCommand => new RelayCommand(o => SetSelectedMethod());
@@ -81,6 +79,7 @@ namespace WpfTiles.ViewModels
             NotifyPropertyChanged(nameof(PlayerControllerWM));
             NotifyPropertyChanged(nameof(LevelSelectorControllerWM));
             NotifyPropertyChanged(nameof(StepsControllerVM));
+            NotifyPropertyChanged(nameof(NotificationsControlVM));
 
             NotifyPropertyChanged(nameof(ScoreBoard));
         }
@@ -103,21 +102,15 @@ namespace WpfTiles.ViewModels
             TaskBar = new TaskBarController(cont);
         }
 
-        private void NotificationReceiver(object sender, NotificationEventArgs e)
-        {
-            NotificationCollection.Add(e.Notification);
-            NotifyPropertyChanged(nameof(IsNotifications));
-        }
-
         public ViewModelMainWindow(ModelGameController cont)
         {
-            ModelNotificationManager.NotificationHandler += NotificationReceiver;
-
             CanvasMapAreaWidth = cont.Map.MapAreaWidth;
             CanvasMapAreaHeight = cont.Map.MapAreaHeight;
 
             CanvasControlAreaWidth = cont.Control.MapAreaWidth;
             CanvasControlAreaHeight = cont.Control.MapAreaHeight;
+
+            NotificationsControlVM = new ViewModelNotificationsControl(cont);
 
             LoadMapFromCont(cont);
         }
