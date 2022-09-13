@@ -12,14 +12,6 @@ using WpfTiles.Model.Parser;
 
 namespace WpfTiles.Model
 {
-    public class ChangeMapToEventArgs : EventArgs
-    {
-        public string FilePath { get; set; }
-        public ChangeMapToEventArgs(string path)
-        {
-            FilePath = path;
-        }
-    }
     class LevelInfo : NotifyPropertyChangedBase
     {
         private bool _Passed;
@@ -70,10 +62,18 @@ namespace WpfTiles.Model
                 }
             }
         }
+        public bool Passed
+        {
+            get { return !Levels.Any(o => !o.Passed); }
+        }
         public ICommand LevelInfoesExpandedCommand => new RelayCommand(o => Expanded());
         private void Expanded()
         {
             IsExpanded = !IsExpanded;
+        }
+        public void Refresh()
+        {
+            NotifyPropertyChanged(nameof(Passed));
         }
     }
 
@@ -91,6 +91,20 @@ namespace WpfTiles.Model
                 }
             }
         }
+        public void LevelPassedMethod(object sender, LevelPassedEventArgs e)
+        {
+            foreach (var item in _Levels)
+            {
+                var curLvl = item.Levels.FirstOrDefault(o => o.FilePath == e.FilePath);
+                if (curLvl != null)
+                {
+                    curLvl.Passed = true;
+                    item.Refresh();
+                    break;
+                }
+            }
+        }
+
         public ModelLevelSelectorController()
         {
             var tmpLevelsLst= new List<LevelInfo>();

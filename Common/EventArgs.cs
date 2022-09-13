@@ -51,4 +51,16 @@ namespace WpfTiles.Common
     {
         public ModelNotification Notification { get; set; }
     }
+    public class LevelPassedEventArgs : EventArgs
+    {
+        public string FilePath { get; set; }
+    }
+    public class ChangeMapToEventArgs : EventArgs
+    {
+        public string FilePath { get; set; }
+        public ChangeMapToEventArgs(string path)
+        {
+            FilePath = path;
+        }
+    }
 }

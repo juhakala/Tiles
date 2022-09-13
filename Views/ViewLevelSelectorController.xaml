@@ -38,6 +38,16 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Background" Value="Gray" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Passed}" Value="True">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
                         <Grid.InputBindings>
                             <MouseBinding Gesture="LeftClick" Command="{Binding LevelInfoesExpandedCommand}" />
                         </Grid.InputBindings>
@@ -60,6 +70,16 @@
                         <ItemsControl.Resources>
                             <DataTemplate DataType="{x:Type models:LevelInfo}">
                                 <Grid>
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="Background" Value="Gray" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Passed}" Value="True">
+                                                    <Setter Property="Background" Value="LightGreen" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
                                     <Grid.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding LevelInfoSelectedCommand}" />
                                     </Grid.InputBindings>

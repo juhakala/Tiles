@@ -47,7 +47,7 @@ namespace WpfTiles.Model
             MapTiles = new List<TileItem>();
             ControlTiles = new List<ControlTileItem>();
             PlayerTile = new PlayerTileItem();
-            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles);
+            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles, string.Empty);
         }
 
         public void InitFileMap(string filepath)
@@ -90,7 +90,8 @@ namespace WpfTiles.Model
             ParserMap.ParseOffsetXY(AvailableControlT);
             ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);
 
-            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles);
+            PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles, filepath);
+            PlayerController.LevelPassedEventHandler += LevelSelectorController.LevelPassedMethod;
         }
 
         public ModelGameController()

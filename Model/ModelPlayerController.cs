@@ -38,6 +38,7 @@ namespace WpfTiles.Model
         private Dictionary<uint, List<ControlTileItem>> _MoveSetDict;
         private int _HistoryOffsetIndex;
         private ENUM_PlayerGameStatus _PlayerStatus;
+        private string _FilePath;
 
         //backup for resetting when needed
         private List<TileItem> _BackUpMapTiles;
@@ -131,10 +132,15 @@ namespace WpfTiles.Model
             }
         }
 
+        public event EventHandler<LevelPassedEventArgs> LevelPassedEventHandler;
+
+
         private void PlayerWonLevel()
         {
             var noti = new ModelNotification() { Title="Level Won Title", Text="Level Won Text"};
             ModelNotificationManager.RaiseNotification(noti);
+            EventHandler<LevelPassedEventArgs> handler = LevelPassedEventHandler;
+            handler?.Invoke(this, new LevelPassedEventArgs() { FilePath = _FilePath });
         }
 
 
@@ -397,9 +403,10 @@ namespace WpfTiles.Model
             UpdateGameProgress(0, TaskbarItemProgressState.None);
         }
 
-        public ModelPlayerController(PlayerTileItem player, List<ControlTileItem> contItems, List<TileItem> mapTiles)
+        public ModelPlayerController(PlayerTileItem player, List<ControlTileItem> contItems, List<TileItem> mapTiles, string filePath)
         {
             //save/clone values to bank * for resetting just this stage and progress => player, maptiles, 
+            _FilePath = filePath;
             _BackUpPlayer = new PlayerTileItem() { X=player.X, Y=player.Y, Direction=player.Direction };
             _BackUpMapTiles = new List<TileItem>();
             foreach (var item in mapTiles)
