@@ -71,15 +71,30 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type models:PlayerTileItem}">
-                    <Grid>
+                    <Grid
+                        Width="{Binding TileWidth}"
+                        Height="{Binding TileHeight}"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
                         <Ellipse
+                                Grid.Column="1"
+                                Grid.Row="1"
                                 Name="MyPlayerEllipse"
                                 Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Color}">
                             <Ellipse.Stroke>
                                 <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
                             </Ellipse.Stroke>
                         </Ellipse>
-                        <Polygon Points="3,1 10,5, 3,9" Stroke="Black" Fill="Black"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Polygon Grid.Column="1" Grid.Row="1" Points="3,1 10,5, 3,9" Stroke="Black" Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Polygon.LayoutTransform>
                                 <RotateTransform Angle="{Binding Path=Direction, Converter={StaticResource ConverterDirectionToAngle}, UpdateSourceTrigger=PropertyChanged}" />
                             </Polygon.LayoutTransform>

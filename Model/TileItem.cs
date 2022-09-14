@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using WpfTiles.Model.Parser;
 
 namespace WpfTiles.Model
 {
@@ -17,6 +18,8 @@ namespace WpfTiles.Model
         private int _ColorValue = 8421504;
         private bool _Star;
 
+        public int TileWidth { get { return (int)ENUM_TileSizes.MapBackground; } }
+        public int TileHeight { get { return (int)ENUM_TileSizes.MapBackground; } }
 
         public uint X
         {

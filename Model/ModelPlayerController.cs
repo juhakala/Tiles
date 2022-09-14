@@ -134,6 +134,11 @@ namespace WpfTiles.Model
 
         public event EventHandler<LevelPassedEventArgs> LevelPassedEventHandler;
 
+        private void PlayerLostLevel()
+        {
+            var noti = new ModelNotification() { Title = "Lost(title)", Text = "Level Lost(text)" };
+            ModelNotificationManager.RaiseNotification(noti);
+        }
 
         private void PlayerWonLevel()
         {
@@ -242,7 +247,8 @@ namespace WpfTiles.Model
                             {
                                 //show error, and reset/get ready to reset
                                 UpdateGameProgress(0.5, TaskbarItemProgressState.Error);
-                                throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
+                                PlayerLostLevel();
+                                //throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
                             }
                             else 
                             {
@@ -315,6 +321,7 @@ namespace WpfTiles.Model
             try
             {
                 UpdateGameProgress(0, TaskbarItemProgressState.Indeterminate);
+                await Task.Delay(1000, _Ct);
                 for (; _PlayerMovesIndex < PlayerMoves.Count(); _PlayerMovesIndex++)
                 {
                     _Ct.ThrowIfCancellationRequested();
@@ -324,9 +331,10 @@ namespace WpfTiles.Model
                         PlayerMoveSetAdvanceOne();
                     }, _Ct);
 
-                    await Task.Delay(2000, _Ct);
+                    await Task.Delay(1000, _Ct);
                 }
-                UpdateGameProgress(0, TaskbarItemProgressState.None);
+                UpdateGameProgress(0.5, TaskbarItemProgressState.Error);//if gets here => lost
+                PlayerLostLevel();
             }
             catch (TaskCanceledException)
             {
@@ -367,6 +375,7 @@ namespace WpfTiles.Model
                 //we'll go again since victoryscreen or error message shown?
                 ResetCurrentMapInstance();
                 InitMoveSet();
+                StartMoveSet();
                 //throw new NotImplementedException($"ModelPlayerController.StartMoveSet => _PlayerStatus:{_PlayerStatus}");
             }
             else if (_PlayerStatus == ENUM_PlayerGameStatus.RUNNING) // no need to do anything if already running? maybe disable button to do this
