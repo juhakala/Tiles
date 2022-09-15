@@ -40,8 +40,11 @@
                     <Grid>
                         <Grid.Style>
                             <Style TargetType="Grid">
-                                <Setter Property="Background" Value="Gray" />
+                                <Setter Property="Background" Value="LightGray" />
                                 <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Open}" Value="True">
+                                        <Setter Property="Background" Value="Gray" />
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding Passed}" Value="True">
                                         <Setter Property="Background" Value="LightGreen" />
                                     </DataTrigger>
@@ -72,8 +75,11 @@
                                 <Grid>
                                     <Grid.Style>
                                         <Style TargetType="Grid">
-                                            <Setter Property="Background" Value="Gray" />
+                                            <Setter Property="Background" Value="LightGray" />
                                             <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Open}" Value="True">
+                                                    <Setter Property="Background" Value="Gray" />
+                                                </DataTrigger>
                                                 <DataTrigger Binding="{Binding Passed}" Value="True">
                                                     <Setter Property="Background" Value="LightGreen" />
                                                 </DataTrigger>

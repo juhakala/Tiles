@@ -15,6 +15,8 @@ namespace WpfTiles.Model
     class LevelInfo : NotifyPropertyChangedBase
     {
         private bool _Passed;
+        private bool _Open;
+
 
         public uint Major { get; set; }
         public uint Minor { get; set; }
@@ -34,12 +36,28 @@ namespace WpfTiles.Model
             }
         }
         
+        public bool Open
+        {
+            get { return _Open; }
+            set
+            {
+                if (_Open != value)
+                {
+                    _Open = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public ICommand LevelInfoSelectedCommand => new RelayCommand(o => Selected());
         public event EventHandler<ChangeMapToEventArgs> ChangeMapToEventHandler;
         private void Selected()
         {
-            EventHandler<ChangeMapToEventArgs> handler = ChangeMapToEventHandler;
-            handler?.Invoke(this, new ChangeMapToEventArgs(FilePath));
+            if (Open)
+            {
+                EventHandler<ChangeMapToEventArgs> handler = ChangeMapToEventHandler;
+                handler?.Invoke(this, new ChangeMapToEventArgs(FilePath));
+            }
         }
     }
     class LevelInfoes : NotifyPropertyChangedBase
@@ -66,6 +84,26 @@ namespace WpfTiles.Model
         {
             get { return !Levels.Any(o => !o.Passed); }
         }
+
+        private bool _Open;
+
+        public bool Open
+        {
+            get { return _Open; }
+            set
+            {
+                if (_Open != value)
+                {
+                    _Open = value;
+                    var openMe = Levels.FirstOrDefault();
+                    if (value && openMe != null)
+                    {
+                        openMe.Open = true;
+                    }
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public ICommand LevelInfoesExpandedCommand => new RelayCommand(o => Expanded());
         private void Expanded()
         {
@@ -74,6 +112,24 @@ namespace WpfTiles.Model
         public void Refresh()
         {
             NotifyPropertyChanged(nameof(Passed));
+        }
+
+        public void PassedMinorLevelAndOpenNext(string filePath)
+        {
+            var curLvl = Levels.FirstOrDefault(o => o.FilePath == filePath);
+            if (curLvl != null)
+            {
+                curLvl.Passed = true;
+                Refresh();
+                if (!Passed)
+                {
+                    var openMe = Levels.FirstOrDefault(o => !o.Passed);
+                    if (openMe != null)
+                    {
+                        openMe.Open = true;
+                    }
+                }
+            }
         }
     }
 
@@ -93,15 +149,17 @@ namespace WpfTiles.Model
         }
         public void LevelPassedMethod(object sender, LevelPassedEventArgs e)
         {
+            var openNext = false;
             foreach (var item in _Levels)
             {
-                var curLvl = item.Levels.FirstOrDefault(o => o.FilePath == e.FilePath);
-                if (curLvl != null)
+                if (openNext)
                 {
-                    curLvl.Passed = true;
-                    item.Refresh();
+                    item.Open = true;
                     break;
                 }
+                item.PassedMinorLevelAndOpenNext(e.FilePath);
+                if (item.Passed)
+                    openNext = true;
             }
         }
 
@@ -137,6 +195,11 @@ namespace WpfTiles.Model
             foreach (var lst in _Levels)
             {
                 lst.Levels.Sort((x, y) => x.Minor.CompareTo(y.Minor));
+            }
+            var openMe = Levels.FirstOrDefault();
+            if (openMe != null)
+            {
+                openMe.Open = true;
             }
         }
     }
