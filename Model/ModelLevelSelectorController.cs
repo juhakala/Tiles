@@ -53,6 +53,7 @@ namespace WpfTiles.Model
         public event EventHandler<ChangeMapToEventArgs> ChangeMapToEventHandler;
         private void Selected()
         {
+
             if (Open)
             {
                 EventHandler<ChangeMapToEventArgs> handler = ChangeMapToEventHandler;

@@ -420,7 +420,7 @@ namespace WpfTiles.Model
             _BackUpMapTiles = new List<TileItem>();
             foreach (var item in mapTiles)
             {
-                _BackUpMapTiles.Add(new TileItem() { X=item.X, Y=item.Y, Width=item.Width, Height=item.Height, Color=item.Color, Star=item.Star });
+                _BackUpMapTiles.Add(new TileItem() { X=item.X, Y=item.Y, Color=item.Color, Star=item.Star });
             }
 
             Player = player;

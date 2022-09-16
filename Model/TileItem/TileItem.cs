@@ -12,8 +12,6 @@ namespace WpfTiles.Model
     {
         private uint _X;
         private uint _Y;
-        private double _Width;
-        private double _Height;
         private SolidColorBrush _Color = new SolidColorBrush(System.Windows.Media.Colors.Gray);
         private int _ColorValue = 8421504;
         private bool _Star;
@@ -41,34 +39,6 @@ namespace WpfTiles.Model
                 if (_Y != value)
                 {
                     _Y = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-        public double Width
-        {
-            get { return _Width; }
-            set
-            {
-                if (_Width != value)
-                {
-                    _Width = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-        public double ImgWidth
-        {
-            get { return Width - 5; }
-        }
-        public double Height
-        {
-            get { return _Height; }
-            set
-            {
-                if (_Height != value)
-                {
-                    _Height = value;
                     NotifyPropertyChanged();
                 }
             }

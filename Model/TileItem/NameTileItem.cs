@@ -31,8 +31,6 @@ namespace WpfTiles.Model
             Name = "Default";
             X = baseItem.X;
             Y = baseItem.Y;
-            Width = baseItem.Width;
-            Height = baseItem.Height;
             Color = baseItem.Color;
         }
     }

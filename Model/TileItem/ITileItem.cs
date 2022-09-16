@@ -11,9 +11,6 @@ namespace WpfTiles.Model
     {
         uint X { get; set; }
         uint Y { get; set; }
-        double Width { get; set; }
-        double ImgWidth { get; }
-        double Height { get; set; }
         SolidColorBrush Color { get; set; }
         int ColorValue { get; }
     }

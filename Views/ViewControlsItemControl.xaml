@@ -47,7 +47,7 @@
                     <Grid.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
                     </Grid.InputBindings>
-                    <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
+                    <Rectangle Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" Fill="{Binding Color}">
                         <Rectangle.Style>
                             <Style TargetType="Rectangle">
                                 <Setter Property="Stroke" Value="Black" />
@@ -59,7 +59,7 @@
                             </Style>
                         </Rectangle.Style>
                     </Rectangle>
-                    <Rectangle Width="{Binding ImgWidth}" Height="{Binding ImgWidth}">
+                    <Rectangle Width="{Binding Source={x:Static models:StaticTileInfo.TileImg_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.TileImg_Height}}">
                         <Rectangle.Style>
                             <Style TargetType="Rectangle">
                                 <Setter Property="Fill">

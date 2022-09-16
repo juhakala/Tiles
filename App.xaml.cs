@@ -18,6 +18,8 @@ namespace WpfTiles
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            //var gCont = ModelMainController.Instance.GameController;
+
             var _MainController = new ModelGameController();
             MainWindow main = new MainWindow();
             main.DataContext = new ViewModelMainWindow(_MainController);

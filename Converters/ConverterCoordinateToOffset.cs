@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using WpfTiles.Model.Parser;
+using WpfTiles.Model;
 
 namespace WpfTiles.Converters
 {
@@ -17,11 +13,11 @@ namespace WpfTiles.Converters
             {
                 if (parameter is bool && (bool)parameter == false)
                 {
-                    var tmp = (int)(values[1]) + (double)((int)(values[0]) * (int)ENUM_TileSizes.MapBackground);
-                    return (int)(values[1]) + (double)((int)(values[0]) * (int)ENUM_TileSizes.MapBackground); //to negative
+                    var tmp = (int)(values[1]) + (double)((int)(values[0]) * StaticTileInfo.MapBackground_Width);
+                    return (int)(values[1]) + (double)((int)(values[0]) * StaticTileInfo.MapBackground_Width); //to negative
                 }
                 else
-                    return (double)((uint)(values[0]) * (int)ENUM_TileSizes.MapBackground + (int)(values[1])); //to positive
+                    return (double)((uint)(values[0]) * StaticTileInfo.MapBackground_Width + (int)(values[1])); //to positive
             }
 
             throw new NotImplementedException();

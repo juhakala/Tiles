@@ -101,8 +101,6 @@ namespace WpfTiles.Model
             Name = string.Empty;
             X = baseItem.X;
             Y = baseItem.Y;
-            Width = baseItem.Width;
-            Height = baseItem.Height;
             Color = baseItem.Color;
         }
         public T Clone<T>() where T : IControlTileItem, new()
@@ -111,8 +109,6 @@ namespace WpfTiles.Model
             res.Name = Name;
             res.X = X;
             res.Y = Y;
-            res.Width = Width;
-            res.Height = Height;
             res.Color = Color;
             res.Sign = Sign;
             res.Selected = Selected;

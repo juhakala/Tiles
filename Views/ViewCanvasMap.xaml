@@ -57,7 +57,7 @@
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type models:TileItem}">
                     <Grid>
-                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}" Focusable="True">
+                        <Rectangle Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" Fill="{Binding Color}" Focusable="True">
                             <Rectangle.Stroke>
                                 <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
                             </Rectangle.Stroke>
@@ -89,7 +89,11 @@
                                 Grid.Column="1"
                                 Grid.Row="1"
                                 Name="MyPlayerEllipse"
-                                Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Color}">
+                                Width="{Binding Source={x:Static models:StaticTileInfo.MapPlayer_Width}}"
+                                Height="{Binding Source={x:Static models:StaticTileInfo.MapPlayer_Height}}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="{Binding Color}">
                             <Ellipse.Stroke>
                                 <SolidColorBrush x:Name="StrokeColor" Color="Black"/>
                             </Ellipse.Stroke>

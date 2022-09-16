@@ -41,32 +41,30 @@ namespace WpfTiles.Model.Parser
 
         static public List<ControlTileItem> ParseAvailableTiles(List<NameTileItem> tiles)
         {
-            var size = (int)ENUM_TileSizes.MapBackground;
             var res = new List<ControlTileItem>();
             foreach (var item in tiles)
             {
-                res.Add(new ControlTileItem() { X = (uint)res.Count(), Name=item.Name, Width = size, Height = size, Y = 2 });
+                res.Add(new ControlTileItem() { X = (uint)res.Count(), Name=item.Name, Y = 2 });
             }
             return res;
         }
 
         static public List<ControlTileItem> ParseAvailableTiles(AvailableControlTilesType tiles, int mode)
         {
-            var size = (int)ENUM_TileSizes.MapBackground;
             var res = new List<ControlTileItem>();
             foreach (var item in tiles.AvailableControlTile)
             {
                 if (mode == 0 && item.Item is uint)
-                    res.Add(new ControlTileItem() { X=(uint)res.Count(), Sign=Convert.ToInt32((uint)item.Item), Width = size, Height = size, Y = 0 });
+                    res.Add(new ControlTileItem() { X=(uint)res.Count(), Sign=Convert.ToInt32((uint)item.Item), Y = 0 });
                 else if (mode == 1 && item.Item is TileColorType)
-                    res.Add(new ControlTileItem() { X=(uint)res.Count(), Color=CorrectColor((TileColorType)item.Item), Width = size, Height = size, Y = 1 });
+                    res.Add(new ControlTileItem() { X=(uint)res.Count(), Color=CorrectColor((TileColorType)item.Item), Y = 1 });
             }
             return res;
         }
 
         static public PlayerTileItem Parse(PlayerTilesType tiles)
         {
-            var tmp = Parse(new TileType[1] { tiles.PlayerTile }, (int)ENUM_TileSizes.MapPlayer);
+            var tmp = Parse(new TileType[1] { tiles.PlayerTile } );
             if (tmp.Count() != 1)
             {
                 //add relevant error message and logging once inplemented
@@ -80,13 +78,12 @@ namespace WpfTiles.Model.Parser
             var res1 = new List<ControlTileItem>();
             var res2 = new List<NameTileItem>();
 
-            var size = (int)ENUM_TileSizes.MapBackground;
             for (int i = 0; i < tiles.ControlTile.Length; i++)
             {
-                res2.Add(new NameTileItem() { X = 0, Y = Convert.ToUInt32(i), Width = size, Height = size, Name = $"f{i+1}"});
+                res2.Add(new NameTileItem() { X = 0, Y = Convert.ToUInt32(i), Name = $"f{i+1}"});
                 for (int j = 0; j < tiles.ControlTile[i].Length; j++)
                 {
-                    res1.Add(new ControlTileItem() { X=Convert.ToUInt32(j) + 1, Y=Convert.ToUInt32(i), Width = size, Height = size, });
+                    res1.Add(new ControlTileItem() { X=Convert.ToUInt32(j) + 1, Y=Convert.ToUInt32(i) });
                 }
             }
             return (res1, res2);
@@ -94,16 +91,15 @@ namespace WpfTiles.Model.Parser
 
         static public List<TileItem> Parse(MapTilesType tiles)
         {
-            return Parse(tiles.MapTile, (int)ENUM_TileSizes.MapBackground);
+            return Parse(tiles.MapTile);
         }
 
-
-        static private List<TileItem> Parse(TileType[] tiles, double size)
+        static private List<TileItem> Parse(TileType[] tiles)
         {
             var res = new List<TileItem>();
             foreach (var item in tiles)
             {
-                res.Add(new TileItem() { X=item.X, Y=item.Y, Width=size, Height=size, Color=CorrectColor(item.Color), Star=item.Star });
+                res.Add(new TileItem() { X=item.X, Y=item.Y, Color=CorrectColor(item.Color), Star=item.Star });
             }
             if (res.GroupBy(p => new { p.X, p.Y }).Count() != res.Count())
             {
