@@ -11,8 +11,6 @@ namespace WpfTiles.Model
         public ModelControl()
         {
             Name = String.Empty;
-            MapAreaWidth = 200;
-            MapAreaHeight = 200;
         }
         public ModelControl(ModelMap map)
         {
@@ -23,9 +21,6 @@ namespace WpfTiles.Model
             OffsetX = map.OffsetX;
             OffsetY = map.OffsetY;
             Name = map.Name;
-            MapAreaWidth = 200;
-            MapAreaHeight = 200;
         }
-
     }
 }

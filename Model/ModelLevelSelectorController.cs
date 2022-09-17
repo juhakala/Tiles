@@ -15,8 +15,7 @@ namespace WpfTiles.Model
     class LevelInfo : NotifyPropertyChangedBase
     {
         private bool _Passed;
-        private bool _Open;
-
+        private bool _Open = true; // for debug
 
         public uint Major { get; set; }
         public uint Minor { get; set; }

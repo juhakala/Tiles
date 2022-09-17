@@ -15,13 +15,13 @@ namespace WpfTiles.Model.Parser
     }
     class ParserTiles
     {
-
         static private SolidColorBrush CorrectColor(TileColorType color)
         {
             var res = new SolidColorBrush(Colors.Gray);
             switch (color)
             {
                 case TileColorType.gray:
+                default:
                     res = new SolidColorBrush(Colors.Gray);
                     break;
                 case TileColorType.green:
@@ -32,8 +32,6 @@ namespace WpfTiles.Model.Parser
                     break;
                 case TileColorType.blue:
                     res = new SolidColorBrush(Colors.Blue);
-                    break;
-                default:
                     break;
             }
             return res;

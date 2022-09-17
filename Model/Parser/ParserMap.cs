@@ -77,10 +77,10 @@ namespace WpfTiles.Model.Parser
             map.MinY = (uint)(tiles.Aggregate((c, d) => c.Y < d.Y ? c : d).Y);
         }
 
-        static public void ParseOffsetXY(ModelMap map)
+        static public void ParseOffsetXY(ModelMap map, int height, int width)
         {
-            var mapXmid = map.MapAreaWidth / 2;
-            var mapYmid = map.MapAreaHeight / 2;
+            var mapXmid = width / 2;;
+            var mapYmid = height / 2;
 
             var tilesXmid = (map.MaxX - map.MinX) / 2.0;
             var tilesYmid = (map.MaxY - map.MinY) / 2.0;

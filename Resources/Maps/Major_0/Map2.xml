@@ -13,27 +13,36 @@
 	<MapTiles>
 		<MapTile>
 			<X>0</X>
-			<Y>2</Y>
+			<Y>3</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>1</X>
+			<Y>3</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
 			<X>1</X>
 			<Y>2</Y>
-			<Color>gray</Color>
-		</MapTile>
-		<MapTile>
-			<X>1</X>
-			<Y>1</Y>
 			<Color>red</Color>
-			<Star>true</Star>
 		</MapTile>
 		<MapTile>
 			<X>2</X>
-			<Y>1</Y>
+			<Y>2</Y>
 			<Color>blue</Color>
 		</MapTile>
 		<MapTile>
 			<X>2</X>
+			<Y>1</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>3</X>
+			<Y>1</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>3</X>
 			<Y>0</Y>
 			<Color>gray</Color>
 			<Star>true</Star>
@@ -42,7 +51,7 @@
 	<PlayerTiles>
 		<PlayerTile>
 			<X>0</X>
-			<Y>2</Y>
+			<Y>3</Y>
 			<Color>red</Color>
 		</PlayerTile>
 	</PlayerTiles>
@@ -53,10 +62,10 @@
 	</Control>
 	<ControlTiles>
 		<ControlTile>
-			<Length>4</Length>
+			<Length>3</Length>
 		</ControlTile>
 		<ControlTile>
-			<Length>4</Length>
+			<Length>3</Length>
 		</ControlTile>
 	</ControlTiles>
 	<AvailableControlTiles>

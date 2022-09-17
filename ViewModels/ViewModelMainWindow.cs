@@ -16,15 +16,11 @@ namespace WpfTiles.ViewModels
 {
     class ViewModelMainWindow : ViewModelBase
     {
-        public int CanvasMapAreaWidth { get; set; }
-        public int CanvasMapAreaHeight { get; set; }
         public int CanvasMapOffsetX { get; set; } //move to own viewmodelCanvasMap later ??
         public int CanvasMapOffsetY { get; set; } //move to own viewmodelCanvasMap later ??
         public ObservableCollection<TileItem> CanvasMapItems { get; set; } //move to own viewmodelCanvasMap later !!
         public ModelScoreBoard ScoreBoard {get;set; } //move to own viewmodelCanvasMap later !!
 
-        public int CanvasControlAreaWidth { get; set; }
-        public int CanvasControlAreaHeight { get; set; }
         public int CanvasControlOffsetX { get; set; }
         public int CanvasControlOffsetY { get; set; }
         public ObservableCollection<TileItem> CanvasControlItems { get; set; }
@@ -104,12 +100,6 @@ namespace WpfTiles.ViewModels
 
         public ViewModelMainWindow(ModelGameController cont)
         {
-            CanvasMapAreaWidth = cont.Map.MapAreaWidth;
-            CanvasMapAreaHeight = cont.Map.MapAreaHeight;
-
-            CanvasControlAreaWidth = cont.Control.MapAreaWidth;
-            CanvasControlAreaHeight = cont.Control.MapAreaHeight;
-
             NotificationsControlVM = new ViewModelNotificationsControl(cont);
 
             LoadMapFromCont(cont);

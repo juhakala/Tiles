@@ -10,6 +10,8 @@ namespace WpfTiles.Model
     {
         private static bool CheckColor(PlayerTileItem player, TileItem item, List<TileItem> mapTiles)
         {
+            if (item.ColorValue == StaticTileInfo.TileColor_DefaultInt)
+                return true;
             var curMapTile = mapTiles.Find(o => o.X == player.X && o.Y == player.Y);
             if (curMapTile == null)
                 throw new InvalidOperationException($"MoveValidator.CheckColor: invalid x='{player.X}' || y='{player.Y}'");

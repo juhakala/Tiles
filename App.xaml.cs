@@ -18,9 +18,7 @@ namespace WpfTiles
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //var gCont = ModelMainController.Instance.GameController;
-
-            var _MainController = new ModelGameController();
+            var _MainController = ModelMainController.Instance.GameController;
             MainWindow main = new MainWindow();
             main.DataContext = new ViewModelMainWindow(_MainController);
             _MainController.LevelLoaderEventHandler += ((ViewModelMainWindow)main.DataContext).LoadMapFromContEvent;

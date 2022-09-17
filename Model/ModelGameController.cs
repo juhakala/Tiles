@@ -68,7 +68,7 @@ namespace WpfTiles.Model
             MapTiles = ParserTiles.Parse(root.MapTiles);
             PlayerTile = ParserTiles.Parse(root.PlayerTiles);
             ParserMap.ParseMapMaxMinXY(Map, MapTiles);
-            ParserMap.ParseOffsetXY(Map);
+            ParserMap.ParseOffsetXY(Map, StaticTileInfo.MapArea_Height, StaticTileInfo.MapArea_Width);
             ParserTiles.ParseTilesNewXY(Map, MapTiles);
             ParserTiles.ParseTilesNewXY(Map, PlayerTile);
 
@@ -76,7 +76,7 @@ namespace WpfTiles.Model
             (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles);
 
             ParserMap.ParseMapMaxMinXY(Control, ControlTiles, NameTiles);
-            ParserMap.ParseOffsetXY(Control);
+            ParserMap.ParseOffsetXY(Control, StaticTileInfo.CanvasControlArea_Height, StaticTileInfo.CanvasControlArea_Width);
             ParserTiles.ParseTilesNewXY(Control, ControlTiles, NameTiles);
 
             PlayerTile.MapTiles = MapTiles;
@@ -85,9 +85,9 @@ namespace WpfTiles.Model
             AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 1));
             AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));
 
-            AvailableControlT = new ModelControl() { MapAreaWidth = 200, MapAreaHeight = 150 };
+            AvailableControlT = new ModelControl() { /*MapAreaWidth = 200, MapAreaHeight = 150*/ };
             ParserMap.ParseMapMaxMinXY(AvailableControlT, AvailableControlTiles);
-            ParserMap.ParseOffsetXY(AvailableControlT);
+            ParserMap.ParseOffsetXY(AvailableControlT, StaticTileInfo.CanvasAvailavleControlArea_Height, StaticTileInfo.CanvasAvailavleControlArea_Width);
             ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);
 
             PlayerController = new ModelPlayerController(PlayerTile, ControlTiles, MapTiles, filepath);

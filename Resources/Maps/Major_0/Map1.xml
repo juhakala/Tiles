@@ -40,6 +40,11 @@
 			<X>3</X>
 			<Y>2</Y>
 			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>4</X>
+			<Y>2</Y>
+			<Color>gray</Color>
 			<Star>true</Star>
 		</MapTile>
 	</MapTiles>

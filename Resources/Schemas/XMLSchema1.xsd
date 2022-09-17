@@ -9,7 +9,7 @@
 	
 	<xs:simpleType name="TileColorType" final="restriction" >
 		<xs:restriction base="xs:string">
-      <xs:enumeration value="gray" />
+			<xs:enumeration value="gray" />
       <xs:enumeration value="green" />
       <xs:enumeration value="red" />
       <xs:enumeration value="blue" />

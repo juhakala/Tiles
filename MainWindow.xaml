@@ -43,9 +43,9 @@
             Grid.Row="1"
             Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding CanvasControlAreaWidth}" d:Width="200" />
+                <ColumnDefinition Width="{Binding Source={x:Static models:StaticTileInfo.CanvasControlArea_Width}}" d:Width="200" />
                 <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="{Binding CanvasMapAreaWidth}" d:Width="400" />
+                <ColumnDefinition Width="{Binding Source={x:Static models:StaticTileInfo.MapArea_Width}}" d:Width="400" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
@@ -74,8 +74,8 @@
             Grid.Row="3"
             BorderBrush="Black"
             BorderThickness="1"
-            Width="{Binding CanvasMapAreaWidth}" d:Width="400"
-            Height="{Binding CanvasMapAreaHeight}" d:Height="400"
+            Width="{Binding Source={x:Static models:StaticTileInfo.MapArea_Width}}" d:Width="400"
+            Height="{Binding Source={x:Static models:StaticTileInfo.MapArea_Height}}" d:Height="400"
             >
             <views:ViewCanvasMap />
         </Border>
@@ -94,8 +94,8 @@
                 Grid.Row="1"
                 BorderBrush="Black"
                 BorderThickness="1"
-                Width="{Binding CanvasControlAreaWidth}" d:Width="200"
-                Height="{Binding CanvasControlAreaHeight}" d:Height="200"
+                Width="{Binding Source={x:Static models:StaticTileInfo.CanvasControlArea_Width}}" d:Width="200"
+                Height="{Binding Source={x:Static models:StaticTileInfo.CanvasControlArea_Height}}" d:Height="200"
                 >
                 <views:ViewCanvasControl />
             </Border>
@@ -110,13 +110,14 @@
                     Width="20" Height="20" 
                     Content="^" 
                     Command="{Binding SetSelectedCommand}"
+                    Background="Gray"
                     />
             </StackPanel>
             <Border
                 Grid.Row="3"
                 BorderBrush="Black"
                 BorderThickness="1"
-                Width="{Binding CanvasControlAreaWidth}" d:Width="200"
+                Width="{Binding Source={x:Static models:StaticTileInfo.CanvasControlArea_Width}}" d:Width="200"
                 Height="150"
                 >
                 <views:ViewControlsItemControl DataContext="{Binding AvailableControlsControlWM}"  />
@@ -128,7 +129,7 @@
             BorderBrush="Black"
             BorderThickness="1"
             Height="70"
-            Width="{Binding CanvasMapAreaWidth}" d:Width="400"
+            Width="{Binding Source={x:Static models:StaticTileInfo.MapArea_Width}}" d:Width="400"
             VerticalAlignment="Center"
             Background="LightGray"
             >

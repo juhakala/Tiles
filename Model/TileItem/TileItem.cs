@@ -13,7 +13,7 @@ namespace WpfTiles.Model
         private uint _X;
         private uint _Y;
         private SolidColorBrush _Color = new SolidColorBrush(System.Windows.Media.Colors.Gray);
-        private int _ColorValue = 8421504;
+        private int _ColorValue = StaticTileInfo.TileColor_DefaultInt;
         private bool _Star;
 
         public int TileWidth { get { return (int)ENUM_TileSizes.MapBackground; } }
