@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,7 +89,7 @@ namespace WpfTiles.ViewModels
 
             CanvasControlOffsetX = cont.Control.OffsetX;
             CanvasControlOffsetY = cont.Control.OffsetY;
-            CanvasControlItems = PopulateCanvasControlItems(cont.ControlTiles, cont.NameTiles);
+            CanvasControlItems = PopulateCanvasControlItems(cont.ControlTiles, cont.NameTiles, CanvasControlItems);
 
             AvailableControlsControlWM = new ViewModelControlsItemControl(cont);
             PlayerControllerWM = new ViewModelPlayerController(cont);
@@ -103,6 +104,7 @@ namespace WpfTiles.ViewModels
             NotificationsControlVM = new ViewModelNotificationsControl(cont);
 
             LoadMapFromCont(cont);
+            cont.LevelLoaderEventHandler += LoadMapFromContEvent;
         }
         private ObservableCollection<TileItem> PopulateCanvasMapItems(List<TileItem> tiles, PlayerTileItem player)
         {
@@ -111,8 +113,16 @@ namespace WpfTiles.ViewModels
             return res;
         }
 
-        private ObservableCollection<TileItem> PopulateCanvasControlItems(List<ControlTileItem> controlTiles, List<NameTileItem> nameTiles)
+        private ObservableCollection<TileItem> PopulateCanvasControlItems(List<ControlTileItem> controlTiles, List<NameTileItem> nameTiles, ObservableCollection<TileItem> origLst)
         {
+            if (origLst != null && origLst.Count > 0)
+            {
+                var itemsToUnHook = origLst.ToList().FindAll(o => o is ControlTileItem co).Cast<ControlTileItem>().ToList();
+                foreach (var item in itemsToUnHook)
+                {
+                    item.TileSelectedHandler -= RemoveOtherSelectionsFromCanvasControlItems;
+                }
+            }
             var lst = new List<TileItem>();
             lst.AddRange(nameTiles);
             lst.AddRange(controlTiles);
