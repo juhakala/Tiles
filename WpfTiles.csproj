@@ -36,10 +36,19 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Update="Resources\Maps\Major_0\Map1.xml">
+    <None Update="Resources\Maps\Major_0\0_2_0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Maps\Major_0\Map2.xml">
+    <None Update="Resources\Maps\Major_0\0_1_0 .xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Maps\Major_0\0_0_0.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Maps\Major_0\0_9_0.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Maps\Major_0\0_8_0.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Maps\Major_1\Map3.xml">

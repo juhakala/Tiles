@@ -2,47 +2,37 @@
 <Root xmlns="http://tempuri.org/XMLSchema1.xsd">
 	<LevelInformation>
 		<MajorLevel>0</MajorLevel>
-		<MinorLevel>1</MinorLevel>
+		<MinorLevel>2</MinorLevel>
 		<MicroLevel>0</MicroLevel>
 	</LevelInformation>
 	<Map>
-		<Name>Second Map Try</Name>
+		<Name>Zero-20</Name>
 		<Width>0</Width>
 		<Height>0</Height>
 	</Map>
 	<MapTiles>
 		<MapTile>
 			<X>0</X>
-			<Y>3</Y>
+			<Y>0</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
 			<X>1</X>
-			<Y>3</Y>
+			<Y>0</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
-			<X>1</X>
-			<Y>2</Y>
-			<Color>red</Color>
-		</MapTile>
-		<MapTile>
 			<X>2</X>
-			<Y>2</Y>
-			<Color>blue</Color>
-		</MapTile>
-		<MapTile>
-			<X>2</X>
-			<Y>1</Y>
+			<Y>0</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
 			<X>3</X>
-			<Y>1</Y>
+			<Y>0</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
-			<X>3</X>
+			<X>4</X>
 			<Y>0</Y>
 			<Color>gray</Color>
 			<Star>true</Star>
@@ -51,41 +41,23 @@
 	<PlayerTiles>
 		<PlayerTile>
 			<X>0</X>
-			<Y>3</Y>
+			<Y>0</Y>
 			<Color>red</Color>
 		</PlayerTile>
 	</PlayerTiles>
 	<Control>
-		<Name>First Control Try</Name>
+		<Name>-default name-</Name>
 		<Width>0</Width>
 		<Height>0</Height>
 	</Control>
 	<ControlTiles>
 		<ControlTile>
-			<Length>3</Length>
-		</ControlTile>
-		<ControlTile>
-			<Length>3</Length>
+			<Length>2</Length>
 		</ControlTile>
 	</ControlTiles>
 	<AvailableControlTiles>
 		<AvailableControlTile>
 			<Sign>0</Sign>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Sign>1</Sign>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Sign>2</Sign>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Color>gray</Color>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Color>blue</Color>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Color>red</Color>
 		</AvailableControlTile>
 	</AvailableControlTiles>
 </Root>

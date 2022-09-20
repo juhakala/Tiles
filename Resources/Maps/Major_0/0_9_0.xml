@@ -2,7 +2,7 @@
 <Root xmlns="http://tempuri.org/XMLSchema1.xsd">
 	<LevelInformation>
 		<MajorLevel>0</MajorLevel>
-		<MinorLevel>0</MinorLevel>
+		<MinorLevel>9</MinorLevel>
 		<MicroLevel>0</MicroLevel>
 	</LevelInformation>
 	<Map>
