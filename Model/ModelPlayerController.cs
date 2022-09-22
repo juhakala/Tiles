@@ -54,6 +54,11 @@ namespace WpfTiles.Model
 
         public event EventHandler<ProgressUpdatedEventArgs> ProgressUpdated;
 
+
+        /*
+         * todo:
+         * updateGameProgress and playerGamestatus should be moved to own gamestatus/progress class
+         */
         private void UpdateGameProgress(double value, TaskbarItemProgressState state)
         {
             if (state == TaskbarItemProgressState.Paused)
@@ -188,6 +193,17 @@ namespace WpfTiles.Model
                 AddToPlayerMoves(item, indexToAdd);
                 indexToAdd = indexToAdd != -1 ? indexToAdd + 1: indexToAdd;
             }
+        }
+
+        public void StopPlayerMoveStepsEvent(object sender, EventArgs e)
+        {
+            StopPlayerMoveSteps();
+        }
+
+        private void StopPlayerMoveSteps()
+        {
+            PausePlayerMoveSteps();
+            UpdateGameProgress(1.0, TaskbarItemProgressState.None);
         }
 
         public void PausePlayerMoveStepsEvent(object sender, EventArgs e)

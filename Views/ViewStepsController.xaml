@@ -27,7 +27,7 @@
                 Background="Red"
                 BorderBrush="Black" 
                 BorderThickness="1" 
-                Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
+                Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" d:Width="20" d:Height="20"
                 Content="s"
                 Command="{Binding StopPlayerAnimCommand}"
                 />
@@ -35,7 +35,7 @@
                 Background="LightPink"
                 BorderBrush="Black" 
                 BorderThickness="1" 
-                Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
+                Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" d:Width="20" d:Height="20"
                 Content="p"
                 Command="{Binding PausePlayerAnimCommand}"
                 />
@@ -43,7 +43,7 @@
                 Background="LightBlue"
                 BorderBrush="Black" 
                 BorderThickness="1" 
-                Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
+                Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" d:Width="20" d:Height="20"
                 Content="-"
                 Command="{Binding StepBackPlayerAnimCommand}"
                 />
@@ -51,7 +51,7 @@
                 Background="LightBlue"
                 BorderBrush="Black" 
                 BorderThickness="1" 
-                Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
+                Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" d:Width="20" d:Height="20"
                 Content="+"
                 Command="{Binding StepForwardPlayerAnimCommand}"
                 />
@@ -59,15 +59,15 @@
                 Background="LightGreen"
                 BorderBrush="Black" 
                 BorderThickness="1" 
-                Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
+                Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" d:Width="20" d:Height="20"
                 Content=">"
                 Command="{Binding StartPlayerAnimCommand}"
                 />
             <Button
-                Background="LightGreen"
+                Background="Green"
                 BorderBrush="Black" 
                 BorderThickness="1" 
-                Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
+                Width="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Width}}" Height="{Binding Source={x:Static models:StaticTileInfo.MapBackground_Height}}" d:Width="20" d:Height="20"
                 Content=">I"
                 Command="{Binding InstantPlayerAnimCommand}"
                 />

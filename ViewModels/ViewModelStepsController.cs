@@ -12,8 +12,14 @@ namespace WpfTiles.ViewModels
 {
     class ViewModelStepsController
     {
-        public int Width { get; set; } = (int)ENUM_TileSizes.MapBackground;
-        public ICommand StopPlayerAnimCommand => new RelayCommand(o => NotImplementedYet(), o => NotImplementedYetCan());
+        public ICommand StopPlayerAnimCommand => new RelayCommand(o => StopPlayerAnimMethod());
+        public event EventHandler StopPlayerAnimEvent;
+        private void StopPlayerAnimMethod()
+        {
+            EventHandler handler = StopPlayerAnimEvent;
+            handler?.Invoke(this, new EventArgs());
+        }
+
         public ICommand PausePlayerAnimCommand => new RelayCommand(o => PausePlayerAnimMethod());
         public event EventHandler PausePlayerAnimEvent;
         private void PausePlayerAnimMethod()
@@ -54,6 +60,7 @@ namespace WpfTiles.ViewModels
             StartPlayerAnimEvent += cont.StartPlayerAnimEvent;
             StepForwardPlayerAnimEvent += cont.PlayerController.PlayerMoveStepForwardOne;
             PausePlayerAnimEvent += cont.PlayerController.PausePlayerMoveStepsEvent;
+            StopPlayerAnimEvent += cont.PlayerController.StopPlayerMoveStepsEvent;
         }
     }
 }
