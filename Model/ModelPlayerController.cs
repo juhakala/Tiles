@@ -39,6 +39,7 @@ namespace WpfTiles.Model
         private int _HistoryOffsetIndex;
         private ENUM_PlayerGameStatus _PlayerStatus;
         private string _FilePath;
+        private Task _PlayerMovementTask;
 
         //backup for resetting when needed
         private List<TileItem> _BackUpMapTiles;
@@ -158,11 +159,11 @@ namespace WpfTiles.Model
                 var key = item.Y / 2 + 1;
                 if (rDict.ContainsKey(key))
                 {
-                    rDict[key].Add(item);
+                    rDict[key].Add(item.Clone<ControlTileItem>());
                 }
                 else
                 {
-                    rDict.Add(key, new List<ControlTileItem>() { item });
+                    rDict.Add(key, new List<ControlTileItem>() { item.Clone<ControlTileItem>() });
                 }
             }
             rDict.OrderBy(o => o.Key);
@@ -189,6 +190,30 @@ namespace WpfTiles.Model
             }
         }
 
+        public void PausePlayerMoveStepsEvent(object sender, EventArgs e)
+        {
+            //todo error: pause is pausing but playermove collection steps is still going +1 so ui current and next is showing out of place, still player moving right
+            PausePlayerMoveSteps(); //start as a async task to not block ui
+        }
+
+        private void PausePlayerMoveSteps()
+        {
+            if (_Src != null)
+            {
+                _Src.Cancel();
+
+                /* todo:
+                 * 1) start as a async task to not block ui 
+                 * 2) validate that ui is not blocked even if cancellation takes time
+                 */
+
+                _PlayerMovementTask.Wait();
+                _Src = new CancellationTokenSource();
+                _Ct = _Src.Token;
+                UpdateGameProgress(0.5, TaskbarItemProgressState.Paused);
+            }
+        }
+
         public void PlayerMoveStepForwardOne(object sender, EventArgs e)
         {
             if (_PlayerStatus == ENUM_PlayerGameStatus.NONE)
@@ -199,15 +224,18 @@ namespace WpfTiles.Model
             {
                 ResetCurrentMapInstance();
                 InitMoveSet();
-                //throw new NotImplementedException($"ModelPlayerController.PlayerMoveStepForwardOne => _PlayerStatus:{_PlayerStatus}");
             }
             else
             {
+                if (_PlayerStatus == ENUM_PlayerGameStatus.RUNNING)
+                {
+                    PausePlayerMoveSteps();
+                }
                 try
                 {
-                    //_Src.Cancel(); //for if already running? or prevent it totally
-                    var task = new Task(async () => await PlayerMoveSetAdvanceOneTask(), _Ct);
-                    task.Start();
+                    //for if already running? or prevent it totally
+                    _PlayerMovementTask = new Task(async () => await PlayerMoveSetAdvanceOneTask(), _Ct);
+                    _PlayerMovementTask.Start();
                 }
                 catch (TaskCanceledException)
                 {
@@ -248,7 +276,6 @@ namespace WpfTiles.Model
                                 //show error, and reset/get ready to reset
                                 UpdateGameProgress(0.5, TaskbarItemProgressState.Error);
                                 PlayerLostLevel();
-                                //throw new NotImplementedException($"ModelPlayerController.PlayerMoveSetAdvanceOneTask, 'else if' => _PlayerMovesIndex:{_PlayerMovesIndex}, PlayerMoves.Count:{PlayerMoves.Count}");
                             }
                             else 
                             {
@@ -366,9 +393,9 @@ namespace WpfTiles.Model
             if (_PlayerStatus == ENUM_PlayerGameStatus.NONE) // if playermoving not yet started
             {
                 InitMoveSet();
-                var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
+                _PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
                 //PlayerMovementTask.ContinueWith(); //check result
-                PlayerMovementTask.Start();
+                _PlayerMovementTask.Start();
             }
             else if (_PlayerStatus == ENUM_PlayerGameStatus.END) // if playermoving is at the end
             {
@@ -384,9 +411,9 @@ namespace WpfTiles.Model
             }
             else if (_PlayerStatus == ENUM_PlayerGameStatus.STARTED || _PlayerStatus == ENUM_PlayerGameStatus.PAUSED)// if playermoving ongoing
             {
-                var PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
+                _PlayerMovementTask = new Task(async () => await PlayerMoveSetTask(), _Ct);
                 //PlayerMovementTask.ContinueWith(); //check result
-                PlayerMovementTask.Start();
+                _PlayerMovementTask.Start();
             }
             else
             {

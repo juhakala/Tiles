@@ -32,7 +32,7 @@
                 Command="{Binding StopPlayerAnimCommand}"
                 />
             <Button
-                Background="LightGray"
+                Background="LightPink"
                 BorderBrush="Black" 
                 BorderThickness="1" 
                 Width="{Binding Width}" Height="{Binding Width}" d:Width="20" d:Height="20"
