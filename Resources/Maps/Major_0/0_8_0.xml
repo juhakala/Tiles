@@ -6,7 +6,7 @@
 		<MicroLevel>0</MicroLevel>
 	</LevelInformation>
 	<Map>
-		<Name>Second Map Try</Name>
+		<Name>Zero-20</Name>
 		<Width>0</Width>
 		<Height>0</Height>
 	</Map>
@@ -45,27 +45,50 @@
 			<X>3</X>
 			<Y>3</Y>
 			<Color>gray</Color>
-			<Star>true</Star>
 		</MapTile>
 		<MapTile>
 			<X>4</X>
 			<Y>3</Y>
-			<Color>gray</Color>
+			<Color>blue</Color>
 		</MapTile>
 		<MapTile>
 			<X>4</X>
 			<Y>4</Y>
-			<Color>gray</Color>
-			<Star>true</Star>
+			<Color>blue</Color>
 		</MapTile>
 		<MapTile>
-			<X>5</X>
+			<X>3</X>
 			<Y>4</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
-			<X>5</X>
+			<X>3</X>
 			<Y>5</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>2</X>
+			<Y>5</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>2</X>
+			<Y>6</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>1</X>
+			<Y>6</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>1</X>
+			<Y>7</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>0</X>
+			<Y>7</Y>
 			<Color>gray</Color>
 			<Star>true</Star>
 		</MapTile>
@@ -78,7 +101,7 @@
 		</PlayerTile>
 	</PlayerTiles>
 	<Control>
-		<Name>First Control Try</Name>
+		<Name>-default name-</Name>
 		<Width>0</Width>
 		<Height>0</Height>
 	</Control>
@@ -99,6 +122,12 @@
 		</AvailableControlTile>
 		<AvailableControlTile>
 			<Sign>2</Sign>
+		</AvailableControlTile>
+		<AvailableControlTile>
+			<Color>gray</Color>
+		</AvailableControlTile>
+		<AvailableControlTile>
+			<Color>green</Color>
 		</AvailableControlTile>
 	</AvailableControlTiles>
 </Root>

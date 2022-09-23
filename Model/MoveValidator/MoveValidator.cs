@@ -15,6 +15,8 @@ namespace WpfTiles.Model
             var curMapTile = mapTiles.Find(o => o.X == player.X && o.Y == player.Y);
             if (curMapTile == null)
                 throw new InvalidOperationException($"MoveValidator.CheckColor: invalid x='{player.X}' || y='{player.Y}'");
+            else if (curMapTile.ColorValue == StaticTileInfo.TileColor_DefaultInt)
+                return true;
             return item.ColorValue == curMapTile.ColorValue;
         }
         public static bool ValidateForwardMove(PlayerTileItem player, TileItem item, List<TileItem> mapTiles)

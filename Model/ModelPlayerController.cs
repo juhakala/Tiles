@@ -195,6 +195,16 @@ namespace WpfTiles.Model
             }
         }
 
+        public void InstantPlayerMoveStepsEvent(object sender, EventArgs e)
+        {
+            InstantlayerMoveSteps();
+        }
+
+        private void InstantlayerMoveSteps()
+        {
+            var foobar = "";
+        }
+
         public void StopPlayerMoveStepsEvent(object sender, EventArgs e)
         {
             StopPlayerMoveSteps();

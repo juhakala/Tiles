@@ -1,21 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <Root xmlns="http://tempuri.org/XMLSchema1.xsd">
 	<LevelInformation>
-		<MajorLevel>2</MajorLevel>
-		<MinorLevel>0</MinorLevel>
+		<MajorLevel>0</MajorLevel>
+		<MinorLevel>7</MinorLevel>
 		<MicroLevel>0</MicroLevel>
 	</LevelInformation>
 	<Map>
-		<Name>4 Map example</Name>
+		<Name>Second Map Try</Name>
 		<Width>0</Width>
 		<Height>0</Height>
 	</Map>
 	<MapTiles>
 		<MapTile>
-			<X>2</X>
+			<X>0</X>
 			<Y>0</Y>
-			<Color>blue</Color>
-			<Star>true</Star>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>1</X>
+			<Y>0</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>1</X>
+			<Y>1</Y>
+			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
 			<X>2</X>
@@ -23,20 +32,9 @@
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
-			<X>0</X>
-			<Y>2</Y>
-			<Color>blue</Color>
-			<Star>true</Star>
-		</MapTile>
-		<MapTile>
-			<X>1</X>
-			<Y>2</Y>
-			<Color>gray</Color>
-		</MapTile>
-		<MapTile>
 			<X>2</X>
 			<Y>2</Y>
-			<Color>green</Color>
+			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
 			<X>3</X>
@@ -44,27 +42,36 @@
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
-			<X>4</X>
-			<Y>2</Y>
-			<Color>blue</Color>
-			<Star>true</Star>
-		</MapTile>
-		<MapTile>
-			<X>2</X>
+			<X>3</X>
 			<Y>3</Y>
 			<Color>gray</Color>
 		</MapTile>
 		<MapTile>
-			<X>2</X>
+			<X>4</X>
+			<Y>3</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>4</X>
 			<Y>4</Y>
-			<Color>blue</Color>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>5</X>
+			<Y>4</Y>
+			<Color>gray</Color>
+		</MapTile>
+		<MapTile>
+			<X>5</X>
+			<Y>5</Y>
+			<Color>gray</Color>
 			<Star>true</Star>
 		</MapTile>
 	</MapTiles>
 	<PlayerTiles>
 		<PlayerTile>
-			<X>2</X>
-			<Y>2</Y>
+			<X>0</X>
+			<Y>0</Y>
 			<Color>red</Color>
 		</PlayerTile>
 	</PlayerTiles>
@@ -75,7 +82,10 @@
 	</Control>
 	<ControlTiles>
 		<ControlTile>
-			<Length>5</Length>
+			<Length>3</Length>
+		</ControlTile>
+		<ControlTile>
+			<Length>3</Length>
 		</ControlTile>
 	</ControlTiles>
 	<AvailableControlTiles>
@@ -87,12 +97,6 @@
 		</AvailableControlTile>
 		<AvailableControlTile>
 			<Sign>2</Sign>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Color>gray</Color>
-		</AvailableControlTile>
-		<AvailableControlTile>
-			<Color>blue</Color>
 		</AvailableControlTile>
 	</AvailableControlTiles>
 </Root>

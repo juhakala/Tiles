@@ -45,7 +45,13 @@ namespace WpfTiles.ViewModels
             handler?.Invoke(this, new EventArgs());
         }
 
-        public ICommand InstantPlayerAnimCommand => new RelayCommand(o => NotImplementedYet(), o => NotImplementedYetCan());
+        public ICommand InstantPlayerAnimCommand => new RelayCommand(o => InstantPlayerAnimMethod(), o => NotImplementedYetCan());
+        public event EventHandler InstantPlayerAnimEvent;
+        private void InstantPlayerAnimMethod()
+        {
+            EventHandler handler = InstantPlayerAnimEvent;
+            handler?.Invoke(this, new EventArgs());
+        }
 
         private void NotImplementedYet()
         {
@@ -61,6 +67,7 @@ namespace WpfTiles.ViewModels
             StepForwardPlayerAnimEvent += cont.PlayerController.PlayerMoveStepForwardOne;
             PausePlayerAnimEvent += cont.PlayerController.PausePlayerMoveStepsEvent;
             StopPlayerAnimEvent += cont.PlayerController.StopPlayerMoveStepsEvent;
+            InstantPlayerAnimEvent += cont.PlayerController.InstantPlayerMoveStepsEvent;
         }
     }
 }
