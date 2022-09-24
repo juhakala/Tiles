@@ -78,7 +78,7 @@
 			<Length>5</Length>
 		</ControlTile>
 	</ControlTiles>
-	<AvailableControlTiles>
+	<AvailableControlTiles ShowNameControls="true">
 		<AvailableControlTile>
 			<Sign>0</Sign>
 		</AvailableControlTile>

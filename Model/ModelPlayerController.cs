@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Shell;
@@ -53,7 +50,6 @@ namespace WpfTiles.Model
         public ModelScoreBoard ScoreBoard { get; set; }
 
         public event EventHandler<ProgressUpdatedEventArgs> ProgressUpdated;
-
 
         /*
          * todo:
@@ -153,7 +149,6 @@ namespace WpfTiles.Model
             EventHandler<LevelPassedEventArgs> handler = LevelPassedEventHandler;
             handler?.Invoke(this, new LevelPassedEventArgs() { FilePath = _FilePath });
         }
-
 
         private Dictionary<uint, List<ControlTileItem>> InitMoveSetDict()
         {

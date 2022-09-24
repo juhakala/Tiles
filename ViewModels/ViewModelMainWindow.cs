@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using WpfTiles.Common;
 using WpfTiles.Model;
-using WpfTiles.Model.Notification;
 
 namespace WpfTiles.ViewModels
 {
@@ -80,6 +73,7 @@ namespace WpfTiles.ViewModels
 
             NotifyPropertyChanged(nameof(ScoreBoard));
         }
+
         private void LoadMapFromCont(ModelGameController cont)
         {
             CanvasMapOffsetX = cont.Map.OffsetX;
@@ -106,6 +100,7 @@ namespace WpfTiles.ViewModels
             LoadMapFromCont(cont);
             cont.LevelLoaderEventHandler += LoadMapFromContEvent;
         }
+
         private ObservableCollection<TileItem> PopulateCanvasMapItems(List<TileItem> tiles, PlayerTileItem player)
         {
             var res = new ObservableCollection<TileItem>(tiles);

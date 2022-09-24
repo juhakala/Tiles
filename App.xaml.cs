@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using WpfTiles.Common;
+﻿using System.Windows;
 using WpfTiles.Model;
 using WpfTiles.ViewModels;
 

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using WpfTiles.Common;
 using WpfTiles.Model.Parser;
@@ -73,7 +71,7 @@ namespace WpfTiles.Model
             ParserTiles.ParseTilesNewXY(Map, PlayerTile);
 
             Control = ParserMap.ParseControl(root.Control);
-            (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles);
+            (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles, root.AvailableControlTiles.ShowNameControls);
 
             ParserMap.ParseMapMaxMinXY(Control, ControlTiles, NameTiles);
             ParserMap.ParseOffsetXY(Control, StaticTileInfo.CanvasControlArea_Height, StaticTileInfo.CanvasControlArea_Width);
@@ -85,7 +83,7 @@ namespace WpfTiles.Model
             AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 1));
             AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));
 
-            AvailableControlT = new ModelControl() { /*MapAreaWidth = 200, MapAreaHeight = 150*/ };
+            AvailableControlT = new ModelControl();
             ParserMap.ParseMapMaxMinXY(AvailableControlT, AvailableControlTiles);
             ParserMap.ParseOffsetXY(AvailableControlT, StaticTileInfo.CanvasAvailavleControlArea_Height, StaticTileInfo.CanvasAvailavleControlArea_Width);
             ParserTiles.ParseTilesNewXY(AvailableControlT, AvailableControlTiles);

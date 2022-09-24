@@ -82,6 +82,7 @@
 			<xs:element name="AvailableControlTile" type="AvailableTileType" minOccurs="1" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="Id" type="xs:unsignedInt" />
+		<xs:attribute name="ShowNameControls" type="xs:boolean" use="required" />
 	</xs:complexType>
 
 	<!-- ***** ROOT ELEMENT ***** -->

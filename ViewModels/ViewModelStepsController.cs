@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfTiles.Common;
 using WpfTiles.Model;
-using WpfTiles.Model.Parser;
 
 namespace WpfTiles.ViewModels
 {

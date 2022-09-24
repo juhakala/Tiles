@@ -71,14 +71,17 @@ namespace WpfTiles.Model.Parser
             return new PlayerTileItem(tmp[0]);
         }
 
-        static public (List<ControlTileItem>, List<NameTileItem>) Parse(ControlTilesType tiles)
+        static public (List<ControlTileItem>, List<NameTileItem>) Parse(ControlTilesType tiles, bool showNameTiles)
         {
             var res1 = new List<ControlTileItem>();
             var res2 = new List<NameTileItem>();
 
             for (int i = 0; i < tiles.ControlTile.Length; i++)
             {
-                res2.Add(new NameTileItem() { X = 0, Y = Convert.ToUInt32(i), Name = $"f{i+1}"});
+                if (showNameTiles)
+                {
+                    res2.Add(new NameTileItem() { X = 0, Y = Convert.ToUInt32(i), Name = $"f{i + 1}" });
+                }
                 for (int j = 0; j < tiles.ControlTile[i].Length; j++)
                 {
                     res1.Add(new ControlTileItem() { X=Convert.ToUInt32(j) + 1, Y=Convert.ToUInt32(i) });

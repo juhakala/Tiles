@@ -210,6 +210,8 @@ namespace Resources.Schemas.XMLSchema1 {
         
         private bool idFieldSpecified;
         
+        private bool showNameControlsField;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AvailableControlTile")]
         public AvailableTileType[] AvailableControlTile {
@@ -240,6 +242,17 @@ namespace Resources.Schemas.XMLSchema1 {
             }
             set {
                 this.idFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public bool ShowNameControls {
+            get {
+                return this.showNameControlsField;
+            }
+            set {
+                this.showNameControlsField = value;
             }
         }
     }
