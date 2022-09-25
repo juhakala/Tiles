@@ -71,7 +71,7 @@ namespace WpfTiles.Model
             ParserTiles.ParseTilesNewXY(Map, PlayerTile);
 
             Control = ParserMap.ParseControl(root.Control);
-            (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles, root.AvailableControlTiles.ShowNameControls);
+            (ControlTiles, NameTiles) = ParserTiles.Parse(root.ControlTiles);
 
             ParserMap.ParseMapMaxMinXY(Control, ControlTiles, NameTiles);
             ParserMap.ParseOffsetXY(Control, StaticTileInfo.CanvasControlArea_Height, StaticTileInfo.CanvasControlArea_Width);
@@ -81,7 +81,8 @@ namespace WpfTiles.Model
 
             AvailableControlTiles = ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 0);
             AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(root.AvailableControlTiles, 1));
-            AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));
+            if (root.AvailableControlTiles.ShowNameControls) //dont add name tiles to controls if not wanted
+                AvailableControlTiles.AddRange(ParserTiles.ParseAvailableTiles(NameTiles));
 
             AvailableControlT = new ModelControl();
             ParserMap.ParseMapMaxMinXY(AvailableControlT, AvailableControlTiles);
